@@ -35,9 +35,12 @@ class _HomeState extends State<Home> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: [
-                  CategorySection(FontAwesomeIcons.mobileAlt, "Mobile App"),
-                  CategorySection(FontAwesomeIcons.desktop, "Desktop App"),
-                  CategorySection(FontAwesomeIcons.laptopCode, "Web App"),
+                  CategorySection(
+                      FontAwesomeIcons.mobileAlt, "Mobile Application"),
+                  CategorySection(
+                      FontAwesomeIcons.desktop, "Desktop Application"),
+                  CategorySection(
+                      FontAwesomeIcons.laptopCode, "Web Application"),
                   CategorySection(FontAwesomeIcons.images, "UI/UX"),
                   CategorySection(FontAwesomeIcons.clinicMedical, "Medical"),
                   CategorySection(FontAwesomeIcons.shoppingCart, "E-Commerce"),

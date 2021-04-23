@@ -1,17 +1,16 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:viisoft/screens/chat_screen.dart';
-import 'package:viisoft/screens/login_screen.dart';
-import 'package:viisoft/screens/onboarding_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:viisoft/screens/home_screen.dart';
+import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
+import 'package:viisoft/screens/onboarding_screen.dart';
 import 'package:viisoft/screens/payment_screen.dart';
-import 'package:viisoft/screens/project_status.dart';
 // import 'package:viisoft/screens/payment.dart'';
 import 'package:viisoft/screens/project_status_details.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
+
 import 'screens/register_screen.dart';
-import 'package:page_transition/page_transition.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
