@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "376617292477",
+    "project_id": "visoft-84734",
+    "storage_bucket": "visoft-84734.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376617292477:android:bd9c116f21c2e5c8cfddd4",
+        "android_client_info": {
+          "package_name": "com.example.viisoft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376617292477-8l77m52jrk01q4kp03uot0gbc50qfs5i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.viisoft",
+            "certificate_hash": "76db0c253a838098342541b918390b9a40a84f5b"
+          }
+        },
+        {
+          "client_id": "376617292477-rp3ll98e353fvvuogn297eif443ifad0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7KBnZOgJ93STPPhRam-1tjIQIQuBhBpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376617292477-rp3ll98e353fvvuogn297eif443ifad0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
