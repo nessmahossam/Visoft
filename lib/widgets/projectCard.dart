@@ -3,10 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/projectDetails.dart';
 
 class projectCard extends StatelessWidget {
-  final String img, title, price, deveName, deveImg;
-
-  projectCard(@required this.img, @required this.title, @required this.price,
-      @required this.deveName, @required this.deveImg);
+  final String img,
+      title,
+      price,
+      deveName,
+      deveImg,
+      desc,
+      date,
+      like,
+      dislike,
+      toolused;
+  final List<dynamic> listOfImages;
+  projectCard(
+      {@required this.img,
+      @required this.title,
+      @required this.price,
+      @required this.deveName,
+      @required this.deveImg,
+      this.desc,
+      this.date,
+      this.like,
+      this.dislike,
+      this.listOfImages,
+      this.toolused});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +35,8 @@ class projectCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return projectDetails(title, price, deveName, deveImg);
+              return projectDetails(title, price, deveName, deveImg,
+                  listOfImages, like, dislike, date, desc, toolused);
             },
           ),
         );
@@ -39,7 +59,7 @@ class projectCard extends StatelessWidget {
                         topRight: Radius.circular(10.0),
                       ),
                       image: DecorationImage(
-                          image: AssetImage(img), fit: BoxFit.cover),
+                          image: NetworkImage(img), fit: BoxFit.cover),
                     ),
                   ),
                   Column(
@@ -79,7 +99,7 @@ class projectCard extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              price,
+                              "$price EGP",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,

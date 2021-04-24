@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/payment_screen.dart';
 
 class ProjectInfo extends StatelessWidget {
-  String projName, price, deveName, deveImg, imagPath;
+  String projName, price, deveName, deveImg, imagPath, desc, date, toolUsed;
 
-  ProjectInfo(
-      this.projName, this.price, this.deveName, this.imagPath, this.deveImg);
+  ProjectInfo(this.projName, this.price, this.deveName, this.imagPath,
+      this.deveImg, this.desc, this.date, this.toolUsed);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,9 @@ class ProjectInfo extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(25.0),
               child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         "Description :",
@@ -40,26 +40,30 @@ class ProjectInfo extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
+                      SizedBox(
+                        height: 15,
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    "Find jobs on Indeed, the job search app built to help you every step of the way. Get free access to millions of job postings, personalize your search.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 17,
+                  Row(
+                    children: [
+                      Text(
+                        desc,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 17,
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Project created in 2019.",
+                        "Project created in $date",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey.shade600,
@@ -109,6 +113,7 @@ class ProjectInfo extends StatelessWidget {
                       Spacer(),
                       RaisedButton(
                         disabledColor: Colors.white,
+                        onPressed: () {},
                         child: Text(
                           "Follow",
                           style: TextStyle(
@@ -150,7 +155,7 @@ class ProjectInfo extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Flutter - FireBase",
+                          toolUsed,
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
