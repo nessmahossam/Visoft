@@ -2,29 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/register_screen.dart';
+import 'package:viisoft/screens/reset_password.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   static String namedRoute = '/loginScreen';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-
+var globalKey = GlobalKey<FormState>();
 class _LoginScreenState extends State<LoginScreen> {
   bool isHiddenPassword = true;
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: SingleChildScrollView(
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    List<Widget> container = [
+      SingleChildScrollView(
         child: Container(
-          height: size.height,
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -47,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 textInputType: TextInputType.text,
                 validate: (value) {
                   if (value.isEmpty) {
-                    return 'please enter valid User Name';
+                    return 'please enter valid email';
                   }
                 },
                 obscureText: false,
@@ -68,25 +77,72 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 validate: (value) {
                   if (value.isEmpty) {
-                    return 'please enter valid User Name';
+                    return 'please enter password';
                   }
                 },
                 obscureText: isHiddenPassword,
               ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
+              // SizedBox(
+              //   height: size.height * 0.02,
+              // ),
               MyButton(
                 size: size,
                 title: 'Sign In',
-                onPress: () {
-                  Navigator.pushReplacementNamed(
-                      context, MainScreen.namedRoute);
+                onPress: () async {
+                  if (globalKey.currentState.validate()) {
+                    try {
+                      var result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: emailController.text, password: passwordController.text);
+                      if (result != null) {
+                        Navigator.pushReplacementNamed(
+                            context, MainScreen.namedRoute);
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      print('Failed with error code: ${e.code}');
+                      print(e.message);
+                      if(e.code=='invalid-email'){
+                        AlertDialog alert = AlertDialog(
+                          title: Text("Login Failed"),
+                          content: Text("Invalid Email "),
+                          actions: [
+                            okButton,
+                          ],
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
+                      }
+                      if (e.code == 'user-not-found'||e.code == 'wrong-password') {
+                        AlertDialog alert = AlertDialog(
+                          title: Text("Login Failed"),
+                          content: Text("Email or Password is not correct "),
+                          actions: [
+                            okButton,
+                          ],
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
+                      }
+                    }
+                  }
                 },
               ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
+              // SizedBox(
+              //   height: size.height * 0.02,
+              // ),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextButton(child: Text('Forgot Password ?', style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),onPressed: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ResetScreen()))),
+                  ]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -122,6 +178,23 @@ class _LoginScreenState extends State<LoginScreen> {
               )
             ],
           ),
+        ),
+      )
+    ];
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        title: Text('Login'
+        ),
+        centerTitle: true,
+      ),
+      body: Form(
+        key: globalKey,
+        child:  Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:container,
         ),
       ),
     );
