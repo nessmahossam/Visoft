@@ -236,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'NationalId': _nationalIDController.text,
                                 'Gender': _genderController,
                                 'DOB': _dobController,
-                                'User Type': isCustomer,
+                                'TypeCustomer': isCustomer,
                                 'BoughtProjects': projectsList,
                               },
                             ))
@@ -415,7 +415,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'NationalId': _nationalIDController.text,
                                 'Gender': _genderController,
                                 'DOB': _dobController,
-                                'User Type': !isCustomer,
+                                'TypeCustomer': !isCustomer,
                                 'DevelopedProjects': projectsList,
                               },
                             ))
