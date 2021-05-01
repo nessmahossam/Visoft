@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -239,9 +239,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'User Type': isCustomer,
                                 'BoughtProjects': projectsList,
                               },
-                            ));
-                    clearForm();
-                    Navigator.pushNamed(context, LoginScreen.namedRoute);
+                            ))
+                        .then((value) {
+                      clearForm();
+                      Navigator.pushNamed(context, LoginScreen.namedRoute);
+                    });
                   },
                 ),
                 new Row(
@@ -416,9 +418,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'User Type': !isCustomer,
                                 'DevelopedProjects': projectsList,
                               },
-                            ));
-                    clearForm();
-                    Navigator.pushNamed(context, LoginScreen.namedRoute);
+                            ))
+                        .then((value) {
+                      clearForm();
+                      Navigator.pushNamed(context, LoginScreen.namedRoute);
+                    });
                   },
                 ),
                 new Row(
