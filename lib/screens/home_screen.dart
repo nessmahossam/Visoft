@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Home.category="All";
   }
 
   @override
@@ -47,9 +48,6 @@ class _HomeState extends State<Home> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   }
-                  // if (snapshot.data.docs.length == 0) {
-                  //   return CircularProgressIndicator();
-                  // }
 
                   return ListView.builder(
                     itemCount: snapshot.data.docs.length,
@@ -109,7 +107,6 @@ class _HomeState extends State<Home> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 }
-
                 return Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) {
@@ -134,12 +131,7 @@ class _HomeState extends State<Home> {
                                   .data()['listOfImages'],
                               toolused:
                                   snapshot.data.docs[index].data()['toolUsed'],
-                              // snapshot.data.docs[index].data()['mainImg'],
-                              // snapshot.data.docs[index].data()['title'],
-                              // snapshot.data.docs[index].data()['price'],
-                              // snapshot.data.docs[index].data()['developerName'],
-                              // snapshot.data.docs[index].data()['developerImg'],
-                            )
+                                                              )
                           : SizedBox();
                     },
                     itemCount: snapshot.data.docs.length,
