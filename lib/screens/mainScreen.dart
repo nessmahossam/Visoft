@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/add_project.dart';
 import 'package:viisoft/screens/inbox_screen.dart';
 import 'package:viisoft/screens/project_status.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:viisoft/screens/login_screen.dart';
+
 
 import 'home_screen.dart';
 
@@ -19,7 +22,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+
       // resizeToAvoidBottomPadding: true,
+            // onTap: (){
+            //   _signOut().then((s){
+            //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            //   });
+            // },child: Container(
+
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -89,4 +99,8 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
+}
+Future<void> _signOut() async {
+  await FirebaseAuth.instance.signOut();
 }
