@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/register_screen.dart';
-import 'package:viisoft/screens/reset_password.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   static String namedRoute = '/loginScreen';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-var globalKey = GlobalKey<FormState>();
+
 class _LoginScreenState extends State<LoginScreen> {
   bool isHiddenPassword = true;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -192,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               )
+
             ]),
       ),
     );
