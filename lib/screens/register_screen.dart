@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
@@ -260,12 +259,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       width: 4.0,
                     ),
                     GestureDetector(
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Color(0xff2f9f9f),
-                            fontSize: 15.0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(LoginScreen.namedRoute);
+                          },
+                          child: Text(
+                            'Sign In',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Color(0xff2f9f9f),
+                              fontSize: 15.0,
+                            ),
                           ),
                         ),
                         onTap: () {
