@@ -44,6 +44,7 @@ showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
         width: double.infinity,
         child: Image(
           fit: BoxFit.cover,
+          image: null,
         ),
       )).show();
 }
