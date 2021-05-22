@@ -45,7 +45,7 @@ class WelcomeScreen extends StatelessWidget {
               size: size,
               title: 'Sign In Now',
               onPress: () {
-                Navigator.pushReplacementNamed(context, LoginScreen.namedRoute);
+                Navigator.pushNamed(context, LoginScreen.namedRoute);
               },
             ),
             MyButton(
