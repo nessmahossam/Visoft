@@ -30,13 +30,18 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
 
-    List<Widget> container = [
-      SingleChildScrollView(
-        child: Container(
-
-          child: Column(
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        title: Text('Login'
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children:<Widget>[
               Image.asset(
                 'assets/images/authentication.png',
                 fit: BoxFit.contain,
@@ -50,152 +55,144 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Theme.of(context).primaryColor,
                 ),
               ),
-              MyTextField(
-                textEditingController: emailController,
-                labelText: 'Your Email',
-                textInputType: TextInputType.text,
-                validate: (value) {
-                  if (value.isEmpty) {
-                    return 'please enter valid email';
-                  }
-                },
-                obscureText: false,
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              MyTextField(
-                textEditingController: passwordController,
-                labelText: 'Password',
-                textInputType: TextInputType.visiblePassword,
-                suffixIcon: IconButton(
-                  onPressed: _togglePasswordView,
-                  icon: Icon(
-                    isHiddenPassword ? Icons.visibility : Icons.visibility_off,
-                    color: Theme.of(context).primaryColor,
+              Form(
+                key: globalKey,
+                child:SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      MyTextField(
+                        textEditingController: emailController,
+                        labelText: 'Your Email',
+                        textInputType: TextInputType.text,
+                        validate: (value) {
+                          if (value.isEmpty) {
+                            return 'please enter valid email';
+                          }
+                        },
+                        obscureText: false,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
+                      MyTextField(
+                        textEditingController: passwordController,
+                        labelText: 'Password',
+                        textInputType: TextInputType.visiblePassword,
+                        suffixIcon: IconButton(
+                          onPressed: _togglePasswordView,
+                          icon: Icon(
+                            isHiddenPassword ? Icons.visibility : Icons.visibility_off,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        validate: (value) {
+                          if (value.isEmpty) {
+                            return 'please enter password';
+                          }
+                        },
+                        obscureText: isHiddenPassword,
+                      ),
+                      // SizedBox(
+                      //   height: size.height * 0.02,
+                      // ),
+                      MyButton(
+                        size: size,
+                        title: 'Sign In',
+                        onPress: () async {
+                          if (globalKey.currentState.validate()) {
+                            try {
+                              UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                  email: emailController.text, password: passwordController.text);
+                              if (userCredential != null) {
+                                print(userCredential.user.uid);
+                                Navigator.pushReplacementNamed(
+                                    context, MainScreen.namedRoute);
+                              }
+                            } on FirebaseAuthException catch (e) {
+                              print('Failed with error code: ${e.code}');
+                              print(e.message);
+                              if(e.code=='invalid-email'){
+                                AlertDialog alert = AlertDialog(
+                                  title: Text("Login Failed"),
+                                  content: Text("Invalid Email "),
+                                  actions: [
+                                    okButton,
+                                  ],
+                                );
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alert;
+                                  },
+                                );
+                              }
+                              if (e.code == 'user-not-found'||e.code == 'wrong-password') {
+                                AlertDialog alert = AlertDialog(
+                                  title: Text("Login Failed"),
+                                  content: Text("Email or Password is not correct "),
+                                  actions: [
+                                    okButton,
+                                  ],
+                                );
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alert;
+                                  },
+                                );
+                              }
+                            }
+                          }
+                        },
+                      ),
+                      // SizedBox(
+                      //   height: size.height * 0.02,
+                      // ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            TextButton(child: Text('Forgot Password ?', style: TextStyle(color: Theme.of(context).primaryColor),
+                            ),onPressed: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ResetScreen()))),
+                          ]),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Don't have an Account ? ",
+                            style: TextStyle(color: Theme.of(context).primaryColor),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return WelcomeScreen();
+                                  },
+                                ),
+                              );
+                            },
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(RegisterScreen.namedRoute);
+                              },
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                validate: (value) {
-                  if (value.isEmpty) {
-                    return 'please enter password';
-                  }
-                },
-                obscureText: isHiddenPassword,
-              ),
-              // SizedBox(
-              //   height: size.height * 0.02,
-              // ),
-              MyButton(
-                size: size,
-                title: 'Sign In',
-                onPress: () async {
-                  if (globalKey.currentState.validate()) {
-                    try {
-                      var result = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: emailController.text, password: passwordController.text);
-                      if (result != null) {
-                        Navigator.pushReplacementNamed(
-                            context, MainScreen.namedRoute);
-                      }
-                    } on FirebaseAuthException catch (e) {
-                      print('Failed with error code: ${e.code}');
-                      print(e.message);
-                      if(e.code=='invalid-email'){
-                        AlertDialog alert = AlertDialog(
-                          title: Text("Login Failed"),
-                          content: Text("Invalid Email "),
-                          actions: [
-                            okButton,
-                          ],
-                        );
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return alert;
-                          },
-                        );
-                      }
-                      if (e.code == 'user-not-found'||e.code == 'wrong-password') {
-                        AlertDialog alert = AlertDialog(
-                          title: Text("Login Failed"),
-                          content: Text("Email or Password is not correct "),
-                          actions: [
-                            okButton,
-                          ],
-                        );
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return alert;
-                          },
-                        );
-                      }
-                    }
-                  }
-                },
-              ),
-              // SizedBox(
-              //   height: size.height * 0.02,
-              // ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TextButton(child: Text('Forgot Password ?', style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),onPressed: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ResetScreen()))),
-                  ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Don't have an Account ? ",
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return WelcomeScreen();
-                          },
-                        ),
-                      );
-                    },
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(RegisterScreen.namedRoute);
-                      },
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                ],
               )
-            ],
-          ),
-        ),
-      )
-    ];
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Text('Login'
-        ),
-        centerTitle: true,
-      ),
-      body: Form(
-        key: globalKey,
-        child:  Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:container,
-        ),
+            ]),
       ),
     );
   }
