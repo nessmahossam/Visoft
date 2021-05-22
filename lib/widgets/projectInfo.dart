@@ -123,7 +123,6 @@ class ProjectInfo extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                             side: BorderSide(color: Colors.grey)),
-                        onPressed: () {},
                       ),
                     ],
                   ),

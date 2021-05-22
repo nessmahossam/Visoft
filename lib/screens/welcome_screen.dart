@@ -21,32 +21,43 @@ class WelcomeScreen extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 33,
-                      ))
-                ])),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Image.asset('assets/images/web_development.png'),
-            SizedBox(
-              height: size.height * 0.07,
-            ),
-            MyButton(
-              size: size,
-              title: 'Sign In Now',
-              onPress: () {
-                Navigator.pushNamed(context, LoginScreen.namedRoute);
-              },
-            ),
-            MyButton(
-              size: size,
-              title: 'Sign Up',
-              onPress: () {
-                Navigator.pushNamed(context, RegisterScreen.namedRoute);
-              },
-            ),
-          ],
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'LibreBodoni',
+                        fontSize: 30,
+                        color: Color(0xff15243b),
+                      ),
+                      children: [
+                    TextSpan(text: 'Welcome to '),
+                    TextSpan(
+                        text: 'Visoft',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 33,
+                        ))
+                  ])),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              Image.asset('assets/images/web_development.png'),
+              SizedBox(
+                height: size.height * 0.07,
+              ),
+              MyButton(
+                size: size,
+                title: 'Sign In Now',
+                onPress: () {
+                  Navigator.pushNamed(context, LoginScreen.namedRoute);
+                },
+              ),
+              MyButton(
+                size: size,
+                title: 'Sign Up',
+                onPress: () {
+                  Navigator.pushNamed(context, RegisterScreen.namedRoute);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
