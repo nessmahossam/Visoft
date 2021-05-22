@@ -36,7 +36,9 @@ class OnboardingScreen extends StatelessWidget {
                         'SKIP',
                         style: Theme.of(context).textTheme.headline5,
                       ),
-                      onPressed: null,
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, WelcomeScreen.namedRoute);
+                      },
                     ),
                   ],
                 ),

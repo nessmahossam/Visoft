@@ -11,24 +11,15 @@ class WelcomeScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        height: size.height,
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            RichText(
-                text: TextSpan(
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'LibreBodoni',
-                      fontSize: 30,
-                      color: Color(0xff15243b),
-                    ),
-                    children: [
-                  TextSpan(text: 'Welcome to '),
-                  TextSpan(
-                      text: 'Visoft',
+      body: SingleChildScrollView(
+        child: Container(
+          height: size.height,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RichText(
+                  text: TextSpan(
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 33,

@@ -1,9 +1,13 @@
+// import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
 import 'package:viisoft/widgets/reg_login_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
   static String namedRoute = '/registerScreen';
@@ -18,12 +22,17 @@ var aLine = Container(
 );
 var globalKey = GlobalKey<FormState>();
 
-TextEditingController name = TextEditingController();
-TextEditingController email = TextEditingController();
-TextEditingController password = TextEditingController();
-TextEditingController phoneNum = TextEditingController();
-TextEditingController dob = TextEditingController();
-TextEditingController nationalID = TextEditingController();
+TextEditingController _nameController = TextEditingController();
+TextEditingController _emailController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
+TextEditingController _phoneController = TextEditingController();
+TextEditingController _nationalIDController = TextEditingController();
+String _dobController;
+String _genderController;
+bool isCustomer = true;
+List<String> projectsList = [];
+
+final _auth = FirebaseAuth.instance;
 
 List<String> genderList = [
   ' ',
@@ -51,10 +60,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
         setState(() {
           print(value);
           selectedGender = value;
+          _genderController = selectedGender;
           print(selectedGender);
         });
       },
     );
+  }
+
+  void clearForm() {
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    _phoneController.clear();
+    _nationalIDController.clear();
+    _dobController = "";
+    _genderController = "";
+    projectsList.clear();
+  }
+
+  bool isEmail(String mail) {
+    if (mail == null || mail.isEmpty) {
+      return false;
+    }
+    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    final regExp = RegExp(pattern);
+    if (!regExp.hasMatch(mail)) {
+      return false;
+    }
+    return true;
+  }
+
+  bool isPassword(String pass) {
+    const pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    final regExp = RegExp(pattern);
+    return regExp.hasMatch(pass);
   }
 
   @override
@@ -77,56 +117,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MyTextField(
-                  textEditingController: name,
+                  textEditingController: _nameController,
                   labelText: 'User Name',
                   textInputType: TextInputType.name,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid User Name';
+                    if (value.isEmpty ||
+                        !value.toString().startsWith(RegExp(r'[A-Z]'))) {
+                      return 'Please enter valid a username!';
                     }
                   },
                   obscureText: false,
                 ),
                 MyTextField(
-                  textEditingController: email,
+                  textEditingController: _emailController,
                   labelText: 'Email',
                   textInputType: TextInputType.emailAddress,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid Email';
+                    if (value.isEmpty || !isEmail(value)) {
+                      return 'Please enter a valid email!';
                     }
                   },
                   obscureText: false,
                 ),
                 MyTextField(
-                  textEditingController: password,
+                  textEditingController: _passwordController,
                   labelText: 'Password',
                   textInputType: TextInputType.visiblePassword,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid Password';
+                    if (value.isEmpty || !isPassword(value)) {
+                      return 'Please enter valid a password!';
                     }
                   },
                   obscureText: true,
                 ),
                 MyTextField(
-                  textEditingController: phoneNum,
+                  textEditingController: _phoneController,
                   labelText: 'Phone Number',
                   textInputType: TextInputType.phone,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid Phone Number';
+                    if (value.isEmpty ||
+                        !value.toString().contains(RegExp(r'[0-9]')) &&
+                            (value.toString().length == 11)) {
+                      return 'Please enter valid a phone number!';
                     }
                   },
                   obscureText: false,
                 ),
                 MyTextField(
-                  textEditingController: nationalID,
+                  textEditingController: _nationalIDController,
                   labelText: 'National ID',
                   textInputType: TextInputType.number,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid National ID';
+                    if (value.isEmpty ||
+                        !value.toString().contains(RegExp(r'[0-9]'))) {
+                      return 'Please enter a valid national ID!';
                     }
                   },
                   obscureText: false,
@@ -149,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mode: CupertinoDatePickerMode.date,
                     initialDateTime: DateTime(1995, 1, 1),
                     onDateTimeChanged: (DateTime newDateTime) {
-                      // Do something
+                      _dobController = newDateTime.toString();
                     },
                   ),
                 ),
@@ -173,13 +217,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   size: size,
                   // this is the size of Media Query .. Media Query used to make the app responsive to all other devices
                   title: 'Register',
-                  onPress: () {
-                    print('hello');
-                    if (globalKey.currentState.validate()) {
-                      print(name);
-                      print(email);
-                      print(password);
-                    }
+                  onPress: () async {
+                    await _auth
+                        .createUserWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text)
+                        .then((authResult) => FirebaseFirestore.instance
+                                .collection('Users')
+                                .doc(authResult.user.uid)
+                                .set(
+                              {
+                                'uid': authResult.user.uid,
+                                'Name': _nameController.text,
+                                'Mail': _emailController.text,
+                                'Password': _passwordController.text,
+                                'Phone': _phoneController.text,
+                                'NationalId': _nationalIDController.text,
+                                'Gender': _genderController,
+                                'DOB': _dobController,
+                                'TypeCustomer': isCustomer,
+                                'BoughtProjects': projectsList,
+                              },
+                            ))
+                        .then((value) {
+                      clearForm();
+                      Navigator.pushNamed(context, LoginScreen.namedRoute);
+                    });
                   },
                 ),
                 new Row(
@@ -210,7 +273,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        onTap: () {}),
+                        onTap: () {
+                          Navigator.pushNamed(context, LoginScreen.namedRoute);
+                        }),
                   ],
                 ),
                 SizedBox(
@@ -237,56 +302,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MyTextField(
-                  textEditingController: name,
+                  textEditingController: _nameController,
                   labelText: 'User Name',
                   textInputType: TextInputType.name,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid User Name';
+                    if (value.isEmpty ||
+                        !value.toString().startsWith(RegExp(r'[A-Z]'))) {
+                      return 'Please enter valid a username!';
                     }
                   },
                   obscureText: false,
                 ),
                 MyTextField(
-                  textEditingController: email,
+                  textEditingController: _emailController,
                   labelText: 'Email',
                   textInputType: TextInputType.emailAddress,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid Email';
+                    if (value.isEmpty || !isEmail(value)) {
+                      return 'Please enter a valid email!';
                     }
                   },
                   obscureText: false,
                 ),
                 MyTextField(
-                  textEditingController: password,
+                  textEditingController: _passwordController,
                   labelText: 'Password',
                   textInputType: TextInputType.visiblePassword,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid Password';
+                    if (value.isEmpty || !isPassword(value)) {
+                      return 'Please enter valid a password!';
                     }
                   },
                   obscureText: true,
                 ),
                 MyTextField(
-                  textEditingController: phoneNum,
+                  textEditingController: _phoneController,
                   labelText: 'Phone Number',
                   textInputType: TextInputType.phone,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid Phone Number';
+                    if (value.isEmpty ||
+                        !value.toString().contains(RegExp(r'[0-9]')) &&
+                            (value.toString().length == 11)) {
+                      return 'Please enter valid a phone number!';
                     }
                   },
                   obscureText: false,
                 ),
                 MyTextField(
-                  textEditingController: nationalID,
+                  textEditingController: _nationalIDController,
                   labelText: 'National ID',
                   textInputType: TextInputType.number,
                   validate: (value) {
-                    if (value.isEmpty) {
-                      return 'please enter valid National ID';
+                    if (value.isEmpty ||
+                        !value.toString().contains(RegExp(r'[0-9]'))) {
+                      return 'Please enter a valid national ID!';
                     }
                   },
                   obscureText: false,
@@ -309,7 +378,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mode: CupertinoDatePickerMode.date,
                     initialDateTime: DateTime(1995, 1, 1),
                     onDateTimeChanged: (DateTime newDateTime) {
-                      // Do something
+                      _dobController = newDateTime.toString();
                     },
                   ),
                 ),
@@ -333,13 +402,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   size: size,
                   // this is the size of Media Query .. Media Query used to make the app responsive to all other devices
                   title: 'Register',
-                  onPress: () {
-                    print('hello');
-                    if (globalKey.currentState.validate()) {
-                      print(name);
-                      print(email);
-                      print(password);
-                    }
+                  onPress: () async {
+                    await _auth
+                        .createUserWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text)
+                        .then((authResult) => FirebaseFirestore.instance
+                                .collection('Users')
+                                .doc(authResult.user.uid)
+                                .set(
+                              {
+                                'uid': authResult.user.uid,
+                                'Name': _nameController.text,
+                                'Mail': _emailController.text,
+                                'Password': _passwordController.text,
+                                'Phone': _phoneController.text,
+                                'NationalId': _nationalIDController.text,
+                                'Gender': _genderController,
+                                'DOB': _dobController,
+                                'TypeCustomer': !isCustomer,
+                                'DevelopedProjects': projectsList,
+                              },
+                            ))
+                        .then((value) {
+                      clearForm();
+                      Navigator.pushNamed(context, LoginScreen.namedRoute);
+                    });
                   },
                 ),
                 new Row(
@@ -364,7 +452,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             fontSize: 15.0,
                           ),
                         ),
-                        onTap: () {})
+                        onTap: () {
+                          Navigator.pushNamed(context, LoginScreen.namedRoute);
+                        })
                   ],
                 ),
                 SizedBox(
