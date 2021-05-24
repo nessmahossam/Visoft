@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:viisoft/screens/mainScreen.dart';
 
 const RegisterAndLoginText = Padding(
   padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
@@ -13,6 +17,8 @@ const RegisterAndLoginText = Padding(
     ),
   ),
 );
+DocumentSnapshot currentUser;
+List<QueryDocumentSnapshot> myProjects;
 showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
     bool isCloseButton, bool isOverLayTapDismiss, BuildContext context, img) {
   var alertStyle = AlertStyle(
@@ -105,3 +111,26 @@ const statusList = [
     "price": "264EGP",
   },
 ];
+void retriveInfo() {
+  FirebaseFirestore.instance
+      .collection("Users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .get()
+      .then((value) {
+    print(value.data());
+    currentUser = value;
+    if (value.data()['TypeCustomer'] == true) {
+      MainScreen.isCustomer = true;
+    } else {
+      MainScreen.isCustomer = false;
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("MyProjects")
+          .get()
+          .then((value) {
+        myProjects = value.docs;
+      });
+    }
+  });
+}
