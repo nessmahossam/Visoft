@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -513,11 +514,13 @@ class _AddProjectState extends State<AddProject> {
                           context);
                     } else if (globalKey.currentState.validate()) {
                       print("hello");
+
                       FirebaseFirestore.instance
                           .collection("AllProjects")
                           .doc(projectName.text)
                           .set({
                         "title": projectName.text,
+                        "userID": FirebaseAuth.instance.currentUser.uid,
                         "desc": desc.text,
                         "projectFeatures": features.text,
                         "toolUsed": technology.text,
@@ -531,6 +534,28 @@ class _AddProjectState extends State<AddProject> {
                         "likes": likes,
                         "dislikes": dislikes,
                       }).then((value) async {
+                        FirebaseFirestore.instance
+                            .collection("Users")
+                            .doc(FirebaseAuth.instance.currentUser.uid)
+                            .collection("MyProjects")
+                            .doc(projectName.text)
+                            .set({
+                          "title": projectName.text,
+                          "userID": FirebaseAuth.instance.currentUser.uid,
+                          "desc": desc.text,
+                          "projectFeatures": features.text,
+                          "toolUsed": technology.text,
+                          "price": projectPrice.text,
+                          "category": selectedCategory,
+                          "mainImg": _mainImguploadedFileURL,
+                          "listOfImages": _ssImguploadedFileURL,
+                          "date": Timestamp.now(),
+                          "developerImg": developerImg,
+                          "developerName": developerName,
+                          "likes": likes,
+                          "dislikes": dislikes,
+                        });
+
                         showAlert(
                             AlertType.success,
                             "Project Uploaded !",
