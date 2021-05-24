@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/register_screen.dart';
+import 'package:viisoft/screens/reset_password.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
@@ -13,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  var globalKey = GlobalKey<FormState>();
+
   bool isHiddenPassword = true;
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
@@ -30,15 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text('Login'
-        ),
+        title: Text('Login'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children:<Widget>[
+            children: <Widget>[
               Image.asset(
                 'assets/images/authentication.png',
                 fit: BoxFit.contain,
@@ -54,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Form(
                 key: globalKey,
-                child:SingleChildScrollView(
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -79,7 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         suffixIcon: IconButton(
                           onPressed: _togglePasswordView,
                           icon: Icon(
-                            isHiddenPassword ? Icons.visibility : Icons.visibility_off,
+                            isHiddenPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
@@ -99,8 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPress: () async {
                           if (globalKey.currentState.validate()) {
                             try {
-                              UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                  email: emailController.text, password: passwordController.text);
+                              UserCredential userCredential = await FirebaseAuth
+                                  .instance
+                                  .signInWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text);
                               if (userCredential != null) {
                                 print(userCredential.user.uid);
                                 Navigator.pushReplacementNamed(
@@ -109,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             } on FirebaseAuthException catch (e) {
                               print('Failed with error code: ${e.code}');
                               print(e.message);
-                              if(e.code=='invalid-email'){
+                              if (e.code == 'invalid-email') {
                                 AlertDialog alert = AlertDialog(
                                   title: Text("Login Failed"),
                                   content: Text("Invalid Email "),
@@ -124,10 +132,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                 );
                               }
-                              if (e.code == 'user-not-found'||e.code == 'wrong-password') {
+                              if (e.code == 'user-not-found' ||
+                                  e.code == 'wrong-password') {
                                 AlertDialog alert = AlertDialog(
                                   title: Text("Login Failed"),
-                                  content: Text("Email or Password is not correct "),
+                                  content:
+                                      Text("Email or Password is not correct "),
                                   actions: [
                                     okButton,
                                   ],
@@ -149,15 +159,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            TextButton(child: Text('Forgot Password ?', style: TextStyle(color: Theme.of(context).primaryColor),
-                            ),onPressed: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ResetScreen()))),
+                            TextButton(
+                                child: Text(
+                                  'Forgot Password ?',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => ResetScreen()))),
                           ]),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
                             "Don't have an Account ? ",
-                            style: TextStyle(color: Theme.of(context).primaryColor),
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -189,7 +207,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               )
-
             ]),
       ),
     );
