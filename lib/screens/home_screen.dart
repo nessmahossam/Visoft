@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Home.category="All";
+    Home.category = "All";
   }
 
   @override
@@ -29,6 +29,10 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
     print(statusList.length);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +135,7 @@ class _HomeState extends State<Home> {
                                   .data()['listOfImages'],
                               toolused:
                                   snapshot.data.docs[index].data()['toolUsed'],
-                                                              )
+                            )
                           : SizedBox();
                     },
                     itemCount: snapshot.data.docs.length,

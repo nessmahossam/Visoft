@@ -23,7 +23,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance.currentUser.uid;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

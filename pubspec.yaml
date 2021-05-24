@@ -34,6 +34,8 @@ dependencies:
   firebase_auth: ^1.1.0
   firebase_storage: ^8.0.3
   cloud_firestore: ^1.0.5
+  flutter_vector_icons: ^1.0.0
+  rating_bar: ^0.2.0
 
 
 
