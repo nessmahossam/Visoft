@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
@@ -120,36 +121,115 @@ class _LoginScreenState extends State<LoginScreen> {
                               print('Failed with error code: ${e.code}');
                               print(e.message);
                               if (e.code == 'invalid-email') {
-                                AlertDialog alert = AlertDialog(
-                                  title: Text("Login Failed"),
-                                  content: Text("Invalid Email "),
-                                  actions: [
-                                    okButton,
-                                  ],
-                                );
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return alert;
-                                  },
-                                );
+                                showAlert(
+                                    AlertType.error,
+                                    "Login Failed, Please enter valid Email!",
+                                    [
+                                      DialogButton(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.done_outline,
+                                              size: 25,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "OK",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                          ],
+                                        ),
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          print('hi');
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                    false,
+                                    false,
+                                    context);
                               }
-                              if (e.code == 'user-not-found' ||
-                                  e.code == 'wrong-password') {
-                                AlertDialog alert = AlertDialog(
-                                  title: Text("Login Failed"),
-                                  content:
-                                      Text("Email or Password is not correct "),
-                                  actions: [
-                                    okButton,
-                                  ],
-                                );
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return alert;
-                                  },
-                                );
+                              if (e.code == 'user-not-found') {
+                                showAlert(
+                                    AlertType.error,
+                                    "User Not Found, Please enter valid Account!",
+                                    [
+                                      DialogButton(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.done_outline,
+                                              size: 25,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "OK",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                          ],
+                                        ),
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          print('hi');
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                    false,
+                                    false,
+                                    context);
+                              }
+                              if (e.code == 'wrong-password') {
+                                showAlert(
+                                    AlertType.error,
+                                    "Login Failed, Please enter valid Password!",
+                                    [
+                                      DialogButton(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.done_outline,
+                                              size: 25,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "OK",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                          ],
+                                        ),
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          print('hi');
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                    false,
+                                    false,
+                                    context);
                               }
                             }
                           }

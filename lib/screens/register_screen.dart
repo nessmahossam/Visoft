@@ -3,6 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:viisoft/constants.dart';
+import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
@@ -74,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _phoneController.clear();
     _nationalIDController.clear();
     _dobController = "";
-    _genderController = "";
+    _genderController = genderList[0];
     projectsList.clear();
   }
 
@@ -218,31 +221,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // this is the size of Media Query .. Media Query used to make the app responsive to all other devices
                   title: 'Register',
                   onPress: () async {
-                    await _auth
-                        .createUserWithEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passwordController.text)
-                        .then((authResult) => FirebaseFirestore.instance
-                                .collection('Users')
-                                .doc(authResult.user.uid)
-                                .set(
-                              {
-                                'uid': authResult.user.uid,
-                                'Name': _nameController.text,
-                                'Mail': _emailController.text,
-                                'Password': _passwordController.text,
-                                'Phone': _phoneController.text,
-                                'NationalId': _nationalIDController.text,
-                                'Gender': _genderController,
-                                'DOB': _dobController,
-                                'TypeCustomer': isCustomer,
-                                'BoughtProjects': projectsList,
-                              },
-                            ))
-                        .then((value) {
-                      clearForm();
-                      Navigator.pushNamed(context, LoginScreen.namedRoute);
-                    });
+                    try {
+                      await _auth
+                          .createUserWithEmailAndPassword(
+                              email: _emailController.text,
+                              password: _passwordController.text)
+                          .then((authResult) => FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(authResult.user.uid)
+                                  .set(
+                                {
+                                  'uid': authResult.user.uid,
+                                  'Name': _nameController.text,
+                                  'Mail': _emailController.text,
+                                  'Password': _passwordController.text,
+                                  'Phone': _phoneController.text,
+                                  'NationalId': _nationalIDController.text,
+                                  'Gender': _genderController,
+                                  'DOB': _dobController,
+                                  'TypeCustomer': isCustomer,
+                                  'BoughtProjects': projectsList,
+                                },
+                              ))
+                          .then((value) {
+                        Navigator.pushNamed(context, Home.namedRoute);
+                      });
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'email-already-in-use') {
+                        showAlert(
+                            AlertType.error,
+                            "Regesteration Error, The account already exists for the email.\n Please, Enter new Email ! ",
+                            [
+                              DialogButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.done_outline,
+                                      size: 25,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "OK",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                  ],
+                                ),
+                                color: Theme.of(context).primaryColor,
+                                onPressed: () {
+                                  print('hi');
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                            false,
+                            false,
+                            context);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                    clearForm();
                   },
                 ),
                 new Row(

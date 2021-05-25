@@ -20,13 +20,13 @@ const RegisterAndLoginText = Padding(
 DocumentSnapshot currentUser;
 List<QueryDocumentSnapshot> myProjects;
 showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
-    bool isCloseButton, bool isOverLayTapDismiss, BuildContext context, img) {
+    bool isCloseButton, bool isOverLayTapDismiss, BuildContext context) {
   var alertStyle = AlertStyle(
       buttonsDirection: ButtonsDirection.column,
       animationType: AnimationType.fromTop,
       isCloseButton: isCloseButton,
       isOverlayTapDismiss: isOverLayTapDismiss,
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.white,
       descStyle: TextStyle(fontWeight: FontWeight.bold),
       animationDuration: Duration(milliseconds: 400),
       alertBorder: RoundedRectangleBorder(
@@ -34,25 +34,20 @@ showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
         side: BorderSide(color: Theme.of(context).primaryColor, width: 3),
       ),
       titleStyle: TextStyle(
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
       ),
       constraints: BoxConstraints.expand(width: 300),
+      //First to chars "55" represents transparency of color
       overlayColor: Color(0x55000000),
       alertElevation: 0,
       alertAlignment: Alignment.center);
   Alert(
-      context: context,
-      title: title,
-      style: alertStyle,
-      buttons: listOfButtons,
-      image: Container(
-        height: 300,
-        width: double.infinity,
-        child: Image(
-          fit: BoxFit.cover,
-          image: null,
-        ),
-      )).show();
+    context: context,
+    type: alertType,
+    title: title,
+    style: alertStyle,
+    buttons: listOfButtons,
+  ).show();
 }
 
 const statusList = [
