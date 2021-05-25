@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:viisoft/screens/project_status.dart';
 
 class PaymentScreen extends StatefulWidget {
-  static String namedRoute = 'paymentScreen';
+  static String namedRoute = '/paymentScreen';
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
@@ -139,11 +140,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             onPressed: () {
-                              if (formKey.currentState.validate()) {
-                                print('valid!');
-                              } else {
-                                print('invalid!');
-                              }
+                              // if (formKey.currentState.validate()) {
+                              //   print('valid!');
+                              // } else {
+                              //   print('invalid!');
+                              // }
+
+                              //function for ongoing
+                              Navigator.pushNamed(
+                                  context, ProjectStatus.namedRoute);
                             },
                           ))
                     ],
