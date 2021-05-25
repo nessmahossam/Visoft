@@ -37,24 +37,24 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(),
-                      Icon(
-                        AntDesign.logout,
-                        color: Colors.white,
-                      ),
+                      // Icon(
+                      //   AntDesign.logout,
+                      //   color: Colors.white,
+                      // ),
                     ],
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    'My\nProfile',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 34,
-                      fontFamily: 'Nisebuschgardens',
-                    ),
-                  ),
+                  // Text(
+                  //   'My\nProfile',
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //     color: Colors.white,
+                  //     fontSize: 34,
+                  //     fontFamily: 'Nisebuschgardens',
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 22,
                   ),
