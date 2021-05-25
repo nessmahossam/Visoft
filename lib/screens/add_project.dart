@@ -603,34 +603,3 @@ class _AddProjectState extends State<AddProject> {
     );
   }
 }
-
-showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
-    bool isCloseButton, bool isOverLayTapDismiss, BuildContext context) {
-  var alertStyle = AlertStyle(
-      buttonsDirection: ButtonsDirection.column,
-      animationType: AnimationType.fromTop,
-      isCloseButton: isCloseButton,
-      isOverlayTapDismiss: isOverLayTapDismiss,
-      backgroundColor: Colors.white,
-      descStyle: TextStyle(fontWeight: FontWeight.bold),
-      animationDuration: Duration(milliseconds: 400),
-      alertBorder: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Theme.of(context).primaryColor, width: 3),
-      ),
-      titleStyle: TextStyle(
-        color: Theme.of(context).primaryColor,
-      ),
-      constraints: BoxConstraints.expand(width: 300),
-      //First to chars "55" represents transparency of color
-      overlayColor: Color(0x55000000),
-      alertElevation: 0,
-      alertAlignment: Alignment.center);
-  Alert(
-    context: context,
-    type: alertType,
-    title: title,
-    style: alertStyle,
-    buttons: listOfButtons,
-  ).show();
-}
