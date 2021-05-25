@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/project_status_details.dart';
 
 class ProjectStatus extends StatefulWidget {
-  static String namedRoute = '/statusScreen';
+  static String namedRoute = '/ProjectStatus';
   @override
   _ProjectStatusState createState() => _ProjectStatusState();
 }
