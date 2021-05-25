@@ -5,6 +5,7 @@ import 'package:viisoft/constants.dart';
 import 'package:viisoft/models/category_model.dart';
 import 'package:viisoft/widgets/category_section.dart';
 import 'package:viisoft/widgets/projectCard.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   static String namedRoute = '/homePage';
@@ -17,11 +18,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = new List<CategoryModel>();
 
+  String formatTimestamp(Timestamp date) {
+    var format = new DateFormat('y-MM-d'); // 'hh:mm' for hour & min
+    return format.format(date.toDate());
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Home.category="All";
+    Home.category = "All";
   }
 
   @override
@@ -29,6 +35,10 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
     print(statusList.length);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +132,8 @@ class _HomeState extends State<Home> {
                                   .data()['developerName'],
                               price: snapshot.data.docs[index].data()['price'],
                               title: snapshot.data.docs[index].data()['title'],
-                              date: "21/2/1999",
+                              date: formatTimestamp(
+                                  snapshot.data.docs[index].data()['date']),
                               desc: snapshot.data.docs[index].data()['desc'],
                               dislike:
                                   snapshot.data.docs[index].data()['dislikes'],
@@ -131,7 +142,7 @@ class _HomeState extends State<Home> {
                                   .data()['listOfImages'],
                               toolused:
                                   snapshot.data.docs[index].data()['toolUsed'],
-                                                              )
+                            )
                           : SizedBox();
                     },
                     itemCount: snapshot.data.docs.length,

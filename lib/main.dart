@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -20,7 +21,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
             backgroundColor: Color(0xff2f9f9f)),
+
         // bottomAppBarColor: Colors.red,
         textTheme: TextTheme(
           headline1: TextStyle(
