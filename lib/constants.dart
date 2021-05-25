@@ -111,7 +111,7 @@ const statusList = [
     "price": "264EGP",
   },
 ];
-void retriveInfo() {
+void retriveInfo(BuildContext context) {
   FirebaseFirestore.instance
       .collection("Users")
       .doc(FirebaseAuth.instance.currentUser.uid)
@@ -132,5 +132,8 @@ void retriveInfo() {
         myProjects = value.docs;
       });
     }
+  }).then((value) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed(MainScreen.namedRoute);
   });
 }
