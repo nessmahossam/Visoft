@@ -35,10 +35,10 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
     print(statusList.length);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Home'),
+      //   centerTitle: true,
+      // ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

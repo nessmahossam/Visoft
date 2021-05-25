@@ -240,66 +240,63 @@ class _AddProjectState extends State<AddProject> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 25),
-                  child: Container(
-                    decoration: ShapeDecoration(
-                      // color: Theme.of(context).primaryColor,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1.0,
-                          style: BorderStyle.solid,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      ),
-                    ),
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection("Categories")
-                          .snapshots(),
-                      builder:
-                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        print(snapshot.data);
-                        if (snapshot.data == null) {
-                          return Center(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("Categories")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      print(snapshot.data);
+                      if (snapshot.data == null) {
+                        return Center(
+                            child: Text(
+                          'loading ...',
+                          style: TextStyle(color: Colors.black),
+                        ));
+                      }
+                      if (!snapshot.hasData) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.connectionState == ConnectionState.none) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List<DropdownMenuItem> categoryItems = [];
+                        for (int i = 0; i < snapshot.data.docs.length; i++) {
+                          DocumentSnapshot snap = snapshot.data.docs[i];
+                          categoryItems.add(
+                            DropdownMenuItem(
                               child: Text(
-                            'loading ...',
-                            style: TextStyle(color: Colors.black),
-                          ));
-                        }
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        if (snapshot.connectionState == ConnectionState.none) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          List<DropdownMenuItem> categoryItems = [];
-                          for (int i = 0; i < snapshot.data.docs.length; i++) {
-                            DocumentSnapshot snap = snapshot.data.docs[i];
-                            categoryItems.add(
-                              DropdownMenuItem(
-                                child: Text(
-                                  snap.id,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                snap.id,
+                                style: TextStyle(
+                                  color: Colors.white,
                                 ),
-                                value: "${snap.id}",
                               ),
-                            );
-                          }
+                              value: "${snap.id}",
+                            ),
+                          );
+                        }
 
-                          // print(object);
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 25),
-                            child: Container(
-                              width: size.width * 0.35,
-                              child: DropdownButtonFormField(
+                        // print(object);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Container(
+                            // width: 200,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: DropdownButton(
+                                dropdownColor: Theme.of(context).primaryColor,
+                                icon: Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
                                 items: categoryItems,
                                 onChanged: (categoryValue) {
                                   final snackBar = SnackBar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
                                       content: Text(
                                           'Selected Category is $categoryValue'));
                                   Scaffold.of(context).showSnackBar(snackBar);
@@ -307,17 +304,29 @@ class _AddProjectState extends State<AddProject> {
                                     selectedCategory = categoryValue;
                                   });
                                 },
-                                validator: (value) => value == null
-                                    ? 'Please select Category.'
-                                    : null,
                                 value: selectedCategory,
                                 isExpanded: false,
+                                // itemHeight: 60,
+                                iconSize: 20,
+                                hint: Text(
+                                  "Choose Category",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  // fontSize: 18,
+                                ),
+
+                                underline: SizedBox(),
                               ),
                             ),
-                          );
-                        }
-                      },
-                    ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
                 SizedBox(
