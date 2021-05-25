@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/register_screen.dart';
@@ -113,8 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       password: passwordController.text);
                               if (userCredential != null) {
                                 print(userCredential.user.uid);
-                                Navigator.pushReplacementNamed(
-                                    context, MainScreen.namedRoute);
+                                retriveInfo(context);
                               }
                             } on FirebaseAuthException catch (e) {
                               print('Failed with error code: ${e.code}');
