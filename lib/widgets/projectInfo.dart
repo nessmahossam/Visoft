@@ -190,7 +190,15 @@ class ProjectInfo extends StatelessWidget {
                   RaisedButton(
                     disabledColor: Colors.red,
                     onPressed: () {
-                      Navigator.of(context).pushNamed(PaymentScreen.namedRoute);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return PaymentScreen(
+                          projName: projName,
+                          price: price,
+                          deveName: deveName,
+                          desc: desc,
+                        );
+                      }));
                     },
                     color: Theme.of(context).primaryColor,
                     child: Text(

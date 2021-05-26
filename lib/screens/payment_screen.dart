@@ -1,11 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/project_status.dart';
+import 'package:viisoft/widgets/projectInfo.dart';
 
 class PaymentScreen extends StatefulWidget {
   static String namedRoute = '/paymentScreen';
+  String projName, price, deveName, desc;
+
+  PaymentScreen({this.projName, this.price, this.deveName, this.desc});
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
@@ -146,7 +154,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               //   print('invalid!');
                               // }
 
-                              //function for ongoing
+                              //To save at client's collection
+                              FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(FirebaseAuth.instance.currentUser.uid)
+                                  .collection("OngoingProjects")
+                                  .doc(projName)
+                                  .set({
+                                'clientId':
+                                    FirebaseAuth.instance.currentUser.uid,
+                                'devName': deveName,
+                                'projName': projName,
+                                'price': price,
+                                'desc': desc,
+                                'projImg': imagPath
+                              });
+
+                              //To save at developer's collections
+
                               Navigator.pushNamed(
                                   context, ProjectStatus.namedRoute);
                             },
