@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:viisoft/screens/login_screen.dart';
 
 
-import 'home_screen.dart';
+import 'package:viisoft/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   static String namedRoute = '/mainScreen';
@@ -23,12 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
-      // resizeToAvoidBottomPadding: true,
-            // onTap: (){
-            //   _signOut().then((s){
-            //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-            //   });
-            // },child: Container(
+
 
       body: PageView(
         controller: _pageController,
@@ -95,12 +90,11 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(Icons.settings),
               inactiveColor: Theme.of(context).accentColor,
               activeColor: Theme.of(context).primaryColor),
+              
         ],
       ),
     );
   }
 
 }
-Future<void> _signOut() async {
-  await FirebaseAuth.instance.signOut();
-}
+

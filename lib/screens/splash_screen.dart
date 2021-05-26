@@ -1,32 +1,18 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:viisoft/screens/home_screen.dart';
-import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/onboarding_screen.dart';
-import 'package:viisoft/screens/payment_screen.dart';
-// import 'package:viisoft/screens/payment.dart'';
-import 'package:viisoft/screens/project_status_details.dart';
-import 'package:viisoft/screens/welcome_screen.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:viisoft/models/firebase_fn.dart';
+import 'package:viisoft/screens/home_screen.dart';
 
-import 'screens/register_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+class SplachScreen extends StatelessWidget{
+  Widget build (BuildContext context){
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
+           theme: ThemeData(
         backgroundColor: Color(0xfffcfcfe),
         primaryColorLight: Color(0xff84b4c1),
         accentColor: Color(0xff84b4c1),
@@ -38,7 +24,6 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
             backgroundColor: Color(0xff2f9f9f)),
-
         // bottomAppBarColor: Colors.red,
         textTheme: TextTheme(
           headline1: TextStyle(
@@ -61,26 +46,34 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: AnimatedSplashScreen(
+      home:  
+         AnimatedSplashScreen(
         duration: 1500,
         splash: 'assets/images/LogoFinal.png',
-        nextScreen: OnboardingScreen(),
+        nextScreen: MScreen(),
         splashTransition: SplashTransition.rotationTransition,
         pageTransitionType: PageTransitionType.rightToLeftWithFade,
         backgroundColor: Color(0xfffcfcfe),
         splashIconSize: 200,
       ),
-      routes: {
-        RegisterScreen.namedRoute: (ctx) => RegisterScreen(),
-        Home.namedRoute: (ctx) => Home(),
-        MainScreen.namedRoute: (ctx) => MainScreen(),
-        OnboardingScreen.namedRoute: (ctx) => OnboardingScreen(),
-        LoginScreen.namedRoute: (ctx) => LoginScreen(),
-        WelcomeScreen.namedRoute: (ctx) => WelcomeScreen(),
-        ProjectStatusDetails.namedRoute: (ctx) => ProjectStatusDetails(),
-        PaymentScreen.namedRoute: (ctx) => PaymentScreen(),
-        // ChatScreen.namedRoute: (ctx) => ChatScreen(),
-      },
+      
     );
+  }
+}
+class MScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return OnboardingScreen();
+    
+    //  FutureBuilder(
+    //     future: DatabaseMethod().getCurrentUser(),
+    //     builder: (context, AsyncSnapshot<dynamic> snapshot){
+    //        if (snapshot.hasData) {
+    //         return MainScreen();
+    //       } else {
+    //         return OnboardingScreen();
+    //       }
+    //     }
+    // );
   }
 }

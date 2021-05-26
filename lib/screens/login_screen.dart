@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:viisoft/models/firebase_fn.dart';
+import 'package:viisoft/models/sharedpref_helper.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/register_screen.dart';
@@ -34,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text('Login'
+        
         ),
         centerTitle: true,
       ),
@@ -104,8 +107,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             try {
                               UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
                                   email: emailController.text, password: passwordController.text);
+                                  User userDetails = userCredential.user;
+                                  SharedPreferenceHelper().saveUserEmail(userDetails.email);
+                                  SharedPreferenceHelper().saveUserId(userDetails.uid);
+                                  
+
+
+                                   
+                            
                               if (userCredential != null) {
-                                print(userCredential.user.uid);
                                 Navigator.pushReplacementNamed(
                                     context, MainScreen.namedRoute);
                               }

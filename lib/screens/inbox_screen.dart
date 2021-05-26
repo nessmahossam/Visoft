@@ -1,11 +1,18 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:viisoft/models/firebase_fn.dart';
+import 'package:viisoft/models/sharedpref_helper.dart';
+import 'package:viisoft/screens/register_screen.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
+import 'package:viisoft/constants.dart';
+
 
 import 'chat_screen.dart';
+import 'login_screen.dart';
 
 class InboxScreen extends StatefulWidget {
   static String namedRoute = '/inboxScreen';
@@ -14,38 +21,106 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen> {
+String myId, myName;
+  
+  getInfo()async{
+    myId = await SharedPreferenceHelper().getUserId();
+    myName = currentUser.data()['Name'];
+
+
+  }
   Stream userStream;
+  String profImg = 'assets/images/user.png';
   TextEditingController searchController = TextEditingController();
   bool isSearching = false;
-  Future<Stream<QuerySnapshot>> getUserByUserName(String userName) async {
-    return FirebaseFirestore.instance
-        .collection("Users")
-        .where("Name", isEqualTo: userName)
-        .snapshots();
+    getChatRoomIdByUserIDs(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
   }
-
   onSearchBtnClick() async {
     isSearching = true;
     setState(() {});
-    userStream = await getUserByUserName(searchController.text);
+    userStream =
+        await DatabaseMethod().getUserByUserName(searchController.text);
     setState(() {});
   }
 
+  Widget searchListUserTile({String name, email, id}) {
+    return GestureDetector(
+      onTap: (){
+       var chatRoomId = getChatRoomIdByUserIDs(id,myId);
+       Map<String , dynamic> chatRoomInfoMap = {
+         "users":[name,myName]
+         };
+         DatabaseMethod().createChatRoom(chatRoomId, chatRoomInfoMap);
+
+  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChatScreen(name,email,id)));        
+      },
+          child: Row(
+         crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+        Image.asset(profImg, height: 50, width: 50),
+        SizedBox(width: 12),
+        SizedBox(height: 30),
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+          Text(name,
+              style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16)),
+          Text(email,
+              style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16)),
+                   SizedBox(height: 30),
+        ])
+      ]),
+    );
+  }
+
   Widget searchUsersList() {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: userStream,
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.documents[index];
-                  return ds["name"];
-                },
-              )
-            : Center(child: CircularProgressIndicator());
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          Text('Something went wrong',   style: TextStyle(
+                color: Colors.blueGrey,
+                fontWeight: FontWeight.bold,
+                fontSize: 16));
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        return ListView.builder(
+          itemCount: snapshot.data.docs.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            DocumentSnapshot ds = snapshot.data.docs[index];
+            return searchListUserTile(              
+              name: ds.data()['Name'],
+            email: ds.data()['Mail'],
+            id: ds.data()['uid']
+            );
+          },
+        );
       },
     );
+  }
+
+  chatRoomList() {
+    return Container();
   }
 
   List list = [
@@ -87,11 +162,26 @@ class _InboxScreenState extends State<InboxScreen> {
     // },
   ];
   @override
+  void initState() {
+    // TODO: implement initState
+    getInfo();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Text('Inbox'),
+          actions: [InkWell(
+            onTap: (){ DatabaseMethod().signOut().then((s){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+              });
+            },
+                      child: Container(
+              padding: EdgeInsets.symmetric(horizontal:16),
+              child: Icon(Icons.logout)),
+          )] ,
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -106,6 +196,7 @@ class _InboxScreenState extends State<InboxScreen> {
                               isSearching = false;
                               searchController.text = "";
                               setState(() {});
+                              print("back btn ");
                             },
                             child: Padding(
                               padding: EdgeInsets.only(right: 12),
@@ -122,16 +213,21 @@ class _InboxScreenState extends State<InboxScreen> {
                                 color: Color(0xff2f9f9f),
                                 width: 1,
                                 style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(30)),
+                            borderRadius: BorderRadius.circular(30),
+                            
+                            ),
                         child: Row(children: [
                           Expanded(
                               child: TextField(
                                   controller: searchController,
                                   decoration: InputDecoration(
+                                    border: InputBorder.none,
                                       hintText: "Search with username "))),
                           GestureDetector(
                               onTap: () {
                                 if (searchController.text != "") {
+                                  print(myName);
+                                  print("search btn ");
                                   onSearchBtnClick();
                                 }
                               },
@@ -140,7 +236,7 @@ class _InboxScreenState extends State<InboxScreen> {
                       ),
                     )
                   ]),
-                  searchUsersList()
+                  isSearching ? searchUsersList() : chatRoomList()
                 ]))
 
         // MyTextField(

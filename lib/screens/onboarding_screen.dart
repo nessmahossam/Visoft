@@ -64,8 +64,9 @@ class OnboardingScreen extends StatelessWidget {
                         ? CustomButton(
                             btnText: 'Get Started',
                             btnFn: () {
-                              Navigator.of(context).pushReplacementNamed(
-                                  WelcomeScreen.namedRoute);
+                              Navigator.push(context, new MaterialPageRoute(
+   builder: (context) => new WelcomeScreen())
+ );
                             },
                           )
                         : Container(),

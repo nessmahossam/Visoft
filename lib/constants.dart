@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:viisoft/screens/mainScreen.dart';
 
 const RegisterAndLoginText = Padding(
   padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
@@ -13,14 +17,16 @@ const RegisterAndLoginText = Padding(
     ),
   ),
 );
+DocumentSnapshot currentUser ;
+List<QueryDocumentSnapshot> myProjects;
 showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
-    bool isCloseButton, bool isOverLayTapDismiss, BuildContext context, img) {
+    bool isCloseButton, bool isOverLayTapDismiss, BuildContext context) {
   var alertStyle = AlertStyle(
       buttonsDirection: ButtonsDirection.column,
       animationType: AnimationType.fromTop,
       isCloseButton: isCloseButton,
       isOverlayTapDismiss: isOverLayTapDismiss,
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.white,
       descStyle: TextStyle(fontWeight: FontWeight.bold),
       animationDuration: Duration(milliseconds: 400),
       alertBorder: RoundedRectangleBorder(
@@ -28,24 +34,20 @@ showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
         side: BorderSide(color: Theme.of(context).primaryColor, width: 3),
       ),
       titleStyle: TextStyle(
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
       ),
       constraints: BoxConstraints.expand(width: 300),
+      //First to chars "55" represents transparency of color
       overlayColor: Color(0x55000000),
       alertElevation: 0,
       alertAlignment: Alignment.center);
   Alert(
-      context: context,
-      title: title,
-      style: alertStyle,
-      buttons: listOfButtons,
-      image: Container(
-        height: 300,
-        width: double.infinity,
-        child: Image(
-          fit: BoxFit.cover,
-        ),
-      )).show();
+    context: context,
+    type: alertType,
+    title: title,
+    style: alertStyle,
+    buttons: listOfButtons,
+  ).show();
 }
 
 const statusList = [
@@ -104,3 +106,29 @@ const statusList = [
     "price": "264EGP",
   },
 ];
+void retriveInfo(BuildContext context) {
+  FirebaseFirestore.instance
+      .collection("Users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .get()
+      .then((value) {
+    print(value.data());
+    currentUser = value;
+    if (value.data()['TypeCustomer'] == true) {
+      // MainScreen.isCustomer = true;
+    } else {
+      // MainScreen.isCustomer = false;
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("MyProjects")
+          .get()
+          .then((value) {
+        myProjects = value.docs;
+      });
+    }
+  }).then((value) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed(MainScreen.namedRoute);
+  });
+}
