@@ -10,9 +10,15 @@ import 'package:viisoft/widgets/projectInfo.dart';
 
 class PaymentScreen extends StatefulWidget {
   static String namedRoute = '/paymentScreen';
-  String projName, price, deveName, desc;
+  String devId, projName, price, deveName, desc, projImg;
 
-  PaymentScreen({this.projName, this.price, this.deveName, this.desc});
+  PaymentScreen(
+      {this.devId,
+      this.projName,
+      this.price,
+      this.deveName,
+      this.desc,
+      this.projImg});
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -159,18 +165,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   .collection("Users")
                                   .doc(FirebaseAuth.instance.currentUser.uid)
                                   .collection("OngoingProjects")
-                                  .doc(projName)
+                                  .doc(widget.projName)
                                   .set({
                                 'clientId':
                                     FirebaseAuth.instance.currentUser.uid,
-                                'devName': deveName,
-                                'projName': projName,
-                                'price': price,
-                                'desc': desc,
-                                'projImg': imagPath
+                                'devName': widget.deveName,
+                                'projName': widget.projName,
+                                'price': widget.price,
+                                'desc': widget.desc,
+                                'projImg': widget.projImg
                               });
 
                               //To save at developer's collections
+                              FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(widget.devId)
+                                  .collection("OngoingProjects")
+                                  .doc(widget.projName)
+                                  .set({
+                                'clientId':
+                                    FirebaseAuth.instance.currentUser.uid,
+                                'devName': widget.deveName,
+                                'projName': widget.projName,
+                                'price': widget.price,
+                                'desc': widget.desc,
+                                'projImg': widget.projImg
+                              });
 
                               Navigator.pushNamed(
                                   context, ProjectStatus.namedRoute);

@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/payment_screen.dart';
 
 class ProjectInfo extends StatelessWidget {
-  String projName, price, deveName, deveImg, imagPath, desc, date, toolUsed;
+  String devId,
+      projName,
+      price,
+      deveName,
+      deveImg,
+      imagPath,
+      desc,
+      date,
+      toolUsed;
 
-  ProjectInfo(this.projName, this.price, this.deveName, this.imagPath,
-      this.deveImg, this.desc, this.date, this.toolUsed);
+  ProjectInfo(this.devId, this.projName, this.price, this.deveName,
+      this.imagPath, this.deveImg, this.desc, this.date, this.toolUsed);
 
   @override
   Widget build(BuildContext context) {
@@ -193,10 +201,12 @@ class ProjectInfo extends StatelessWidget {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return PaymentScreen(
+                          devId: devId,
                           projName: projName,
                           price: price,
                           deveName: deveName,
                           desc: desc,
+                          projImg: imagPath,
                         );
                       }));
                     },

@@ -119,6 +119,7 @@ class _HomeState extends State<Home> {
                                       .data()['category'] ||
                               Home.category == "All"
                           ? projectCard(
+                              userId: snapshot.data.docs[index].data()['uid'],
                               img: snapshot.data.docs[index].data()['mainImg'],
                               deveImg: snapshot.data.docs[index]
                                   .data()['developerImg'],

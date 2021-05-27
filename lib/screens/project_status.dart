@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viisoft/screens/project_status_details.dart';
@@ -15,6 +17,24 @@ class _ProjectStatusState extends State<ProjectStatus> {
   Widget build(BuildContext context) {
     final bool imageRight = false;
     final Size size = MediaQuery.of(context).size;
+
+    // StreamBuilder<QuerySnapshot>(stream: FirebaseFirestore.instance
+    //                 .collection("Users").doc(FirebaseAuth.instance.currentUser.uid)
+    //                 .collection("OngoingProjects")
+    //                 .snapshots(),
+
+    //                 builder: (BuildContext context,
+    //                 AsyncSnapshot<QuerySnapshot> snapshot) {
+    //               if (snapshot.hasError) {
+    //                 return Text('Something went wrong');
+    //               }
+
+    //               if (snapshot.connectionState == ConnectionState.waiting) {
+    //                 return CircularProgressIndicator();
+
+    //                 return
+    //               };)
+
     List<Widget> lists = [
       ListView(
         scrollDirection: Axis.vertical,
@@ -172,6 +192,7 @@ class _ProjectStatusState extends State<ProjectStatus> {
         ],
       ),
     ];
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
