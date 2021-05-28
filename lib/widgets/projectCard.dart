@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:viisoft/screens/projectDetails.dart';
 
 class projectCard extends StatelessWidget {
-  final String img,
+  final String userId,
+      img,
       title,
       price,
       deveName,
@@ -15,7 +16,8 @@ class projectCard extends StatelessWidget {
       toolused;
   final List<dynamic> listOfImages;
   projectCard(
-      {@required this.img,
+      {this.userId,
+      @required this.img,
       @required this.title,
       @required this.price,
       @required this.deveName,
@@ -35,7 +37,7 @@ class projectCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return projectDetails(title, price, deveName, deveImg,
+              return projectDetails(userId, title, price, deveName, deveImg,
                   listOfImages, like, dislike, date, desc, toolused);
             },
           ),

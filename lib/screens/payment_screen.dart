@@ -1,10 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:viisoft/constants.dart';
+import 'package:viisoft/screens/project_status.dart';
+import 'package:viisoft/widgets/projectInfo.dart';
 
 class PaymentScreen extends StatefulWidget {
-  static String namedRoute = 'paymentScreen';
+  static String namedRoute = '/paymentScreen';
+  String devId, projName, price, deveName, desc, projImg;
+
+  PaymentScreen(
+      {this.devId,
+      this.projName,
+      this.price,
+      this.deveName,
+      this.desc,
+      this.projImg});
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
@@ -139,11 +154,46 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             onPressed: () {
-                              if (formKey.currentState.validate()) {
-                                print('valid!');
-                              } else {
-                                print('invalid!');
-                              }
+                              // if (formKey.currentState.validate()) {
+                              //   print('valid!');
+                              // } else {
+                              //   print('invalid!');
+                              // }
+
+                              //To save at client's collection
+                              FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(FirebaseAuth.instance.currentUser.uid)
+                                  .collection("OngoingProjects")
+                                  .doc(widget.projName)
+                                  .set({
+                                'clientId':
+                                    FirebaseAuth.instance.currentUser.uid,
+                                'devName': widget.deveName,
+                                'projName': widget.projName,
+                                'price': widget.price,
+                                'desc': widget.desc,
+                                'projImg': widget.projImg
+                              });
+
+                              //To save at developer's collections
+                              FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(widget.devId)
+                                  .collection("OngoingProjects")
+                                  .doc(widget.projName)
+                                  .set({
+                                'clientId':
+                                    FirebaseAuth.instance.currentUser.uid,
+                                'devName': widget.deveName,
+                                'projName': widget.projName,
+                                'price': widget.price,
+                                'desc': widget.desc,
+                                'projImg': widget.projImg
+                              });
+
+                              Navigator.pushNamed(
+                                  context, ProjectStatus.namedRoute);
                             },
                           ))
                     ],
