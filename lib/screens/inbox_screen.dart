@@ -9,7 +9,6 @@ import 'package:viisoft/screens/register_screen.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
 import 'package:viisoft/constants.dart';
 
-
 import 'chat_screen.dart';
 import 'login_screen.dart';
 
@@ -20,23 +19,25 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen> {
-String myId, myName;
-  
-  getInfo()async{
+  String myId, myName;
+
+  getInfo() async {
     myId = currentUser.data()['uid'];
-    myName =  currentUser.data()['Name'];
+    myName = currentUser.data()['Name'];
   }
+
   Stream userStream, chatRoomsStream;
   String profImg = 'assets/images/profile.png';
   TextEditingController searchController = TextEditingController();
   bool isSearching = false;
-    getChatRoomIdByUserIDs(String a, String b) {
+  getChatRoomIdByUserIDs(String a, String b) {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
       return "$b\_$a";
     } else {
       return "$a\_$b";
     }
   }
+
   onSearchBtnClick() async {
     isSearching = true;
     setState(() {});
@@ -45,7 +46,7 @@ String myId, myName;
     setState(() {});
   }
 
-    Widget chatRoomsList() {
+  Widget chatRoomsList() {
     return StreamBuilder(
       stream: chatRoomsStream,
       builder: (context, snapshot) {
@@ -62,46 +63,42 @@ String myId, myName;
     );
   }
 
-
   Widget searchListUserTile({String name, email, id}) {
     return GestureDetector(
-      onTap: (){
-       var chatRoomId = getChatRoomIdByUserIDs(name,myName);
-       Map<String , dynamic> chatRoomInfoMap = {
-         "users":[name,myName]
-         };
-         DatabaseMethod().createChatRoom(chatRoomId, chatRoomInfoMap);
+      onTap: () {
+        var chatRoomId = getChatRoomIdByUserIDs(name, myName);
+        Map<String, dynamic> chatRoomInfoMap = {
+          "users": [name, myName]
+        };
+        DatabaseMethod().createChatRoom(chatRoomId, chatRoomInfoMap);
 
-  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChatScreen( myName ,name)));        
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ChatScreen(myName, name)));
       },
-          child: Row(
-         crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-        Image.asset(profImg, height: 50, width: 50),
-        SizedBox(width: 12),
-        SizedBox(height: 30),
-
-        Column(
+      child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
-           children: [
-          Text(name,
-              style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16)),
-          Text(email,
-              style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16)),
-                   SizedBox(height: 30),
-        ])
-      ]),
+          children: [
+            Image.asset(profImg, height: 50, width: 50),
+            SizedBox(width: 12),
+            SizedBox(height: 30),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16)),
+                  Text(email,
+                      style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16)),
+                  SizedBox(height: 30),
+                ])
+          ]),
     );
   }
 
@@ -110,59 +107,67 @@ String myId, myName;
       stream: userStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          Text('Something went wrong',   style: TextStyle(
-                color: Colors.blueGrey,
-                fontWeight: FontWeight.bold,
-                fontSize: 16));
+          Text('Something went wrong',
+              style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
-        return snapshot.hasData ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            DocumentSnapshot ds = snapshot.data.docs[index];
-            return searchListUserTile(              
-              name: ds.data()['Name'],
-            email: ds.data()['Mail'],
-            id: ds.data()['uid']
-            );
-          },
-        ):Container();
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = snapshot.data.docs[index];
+                  return searchListUserTile(
+                      name: ds.data()['Name'],
+                      email: ds.data()['Mail'],
+                      id: ds.data()['uid']);
+                },
+              )
+            : Container();
       },
     );
   }
 
-  getChatRooms()async{
+  getChatRooms() async {
     chatRoomsStream = await DatabaseMethod().getChatRooms();
     setState(() {});
   }
-  onScreenLoaded()async{
-      await getInfo();
+
+  onScreenLoaded() async {
+    await getInfo();
     getChatRooms();
   }
-  
+
   @override
   void initState() {
-  onScreenLoaded();
+    onScreenLoaded();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Text('Inbox'),
-          actions: [InkWell(
-            onTap: (){ DatabaseMethod().signOut().then((s){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-              });
-            },
-                      child: Container(
-              padding: EdgeInsets.symmetric(horizontal:16),
-              child: Icon(Icons.logout)),
-          )] ,
+          actions: [
+            InkWell(
+              onTap: () {
+                DatabaseMethod().signOut().then((s) {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                });
+              },
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(Icons.logout)),
+            )
+          ],
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -190,19 +195,18 @@ String myId, myName;
                         margin: EdgeInsets.symmetric(vertical: 16),
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Color(0xff2f9f9f),
-                                width: 1,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(30),
-                            
-                            ),
+                          border: Border.all(
+                              color: Color(0xff2f9f9f),
+                              width: 1,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                         child: Row(children: [
                           Expanded(
                               child: TextField(
                                   controller: searchController,
                                   decoration: InputDecoration(
-                                    border: InputBorder.none,
+                                      border: InputBorder.none,
                                       hintText: "Search with username "))),
                           GestureDetector(
                               onTap: () {
@@ -218,14 +222,10 @@ String myId, myName;
                     )
                   ]),
                   isSearching ? searchUsersList() : chatRoomsList()
-                ]))
-
-
-        );
-
-  
+                ])));
   }
 }
+
 class ChatRoomListTile extends StatefulWidget {
   final String lastMessage, chatRoomId, myUsername;
   ChatRoomListTile(this.lastMessage, this.chatRoomId, this.myUsername);
@@ -235,22 +235,25 @@ class ChatRoomListTile extends StatefulWidget {
 }
 
 class _ChatRoomListTileState extends State<ChatRoomListTile> {
-
-  String profilePicUrl = "assets/images/profile.png", name = "", username = "",email="",id;
+  String profilePicUrl = "assets/images/profile.png",
+      name = "",
+      username = "",
+      email = "",
+      id;
   String mmm;
 
   getThisUserInfo() async {
-    username = widget.chatRoomId.replaceAll(widget.myUsername, "").replaceAll("_", "");
-
+    username =
+        widget.chatRoomId.replaceAll(widget.myUsername, "").replaceAll("_", "");
 
     QuerySnapshot querySnapshot = await DatabaseMethod().getUserInfo(username);
     querySnapshot.docs.forEach((element) {
       name = element['Name'];
     });
 
-          // mmm = querySnapshot.docs[0]["Name"];
-          // email = querySnapshot.docs[0]["Mail"];
-          //    id ="${querySnapshot.docs[0]["uid"]}";
+    // mmm = querySnapshot.docs[0]["Name"];
+    // email = querySnapshot.docs[0]["Mail"];
+    //    id ="${querySnapshot.docs[0]["uid"]}";
     setState(() {});
   }
 
@@ -267,74 +270,67 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen( username,name)));
+                builder: (context) => ChatScreen(username, name)));
       },
       child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 3.5,
-                                        color: Theme.of(context).primaryColor),
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 3,
-                                          blurRadius: 3),
-                                    ]),
-                                child: CircleAvatar(
-                                  radius: 35,
-                                  backgroundImage:
-                                      AssetImage("assets/images/profile.png"),
-                                ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.65,
-                                padding: EdgeInsets.only(left: 20),
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          username,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                  
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Text(
-                                            widget.lastMessage,
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontSize: 15),
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 3.5, color: Theme.of(context).primaryColor),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 3),
+                      ]),
+                  child: CircleAvatar(
+                    radius: 35,
+                    backgroundImage: AssetImage("assets/images/profile.png"),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.65,
+                  padding: EdgeInsets.only(left: 20),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            username,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              widget.lastMessage,
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 15),
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
-    
   }
 }

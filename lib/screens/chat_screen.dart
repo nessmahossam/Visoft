@@ -5,70 +5,67 @@ import 'package:viisoft/models/firebase_fn.dart';
 
 import 'package:viisoft/constants.dart';
 
-
 class ChatScreen extends StatefulWidget {
   static String namedRoute = '/ChatScreen';
-  final String userName,myName;
-  String userID ;
+  final String userName, myName;
+  String userID;
   String email;
-String profImg = 'assets/images/user.png';
-  ChatScreen(    
-      this.userName,
-      this.myName,
+  String profImg = 'assets/images/user.png';
+  ChatScreen(
+    this.userName,
+    this.myName,
   );
-  
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageTextEdittingController = TextEditingController();
   Stream messageStream;
-  String chatRoomId, messageId= " ";
+  String chatRoomId, messageId = " ";
 
- String myId , myEmail ;
+  String myId, myEmail;
   String myName = currentUser.data()['Name'];
 
-  getInfo()async{
+  getInfo() async {
     myEmail = currentUser.data()['Mail'];
     myId = currentUser.data()['uid'];
     chatRoomId = getChatRoomIdByUserNames(widget.userName, myName);
-
-
   }
-    getChatRoomIdByUserNames(String a, String b) {
+
+  getChatRoomIdByUserNames(String a, String b) {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
       return "$b\_$a";
     } else {
       return "$a\_$b";
     }
   }
-addMessage(){
-  if(messageTextEdittingController.text !=""){
-    String message = messageTextEdittingController.text;
+
+  addMessage() {
+    if (messageTextEdittingController.text != "") {
+      String message = messageTextEdittingController.text;
       var lastMessageTs = DateTime.now();
       Map<String, dynamic> messageInfoMap = {
         "message": message,
         "sendBy": myName,
         "ts": lastMessageTs,
       };
-  
 
-      DatabaseMethod().addMessage(chatRoomId,messageId,messageInfoMap).then((value) {
-            Map<String, dynamic> lastMessageInfoMap = {
+      DatabaseMethod()
+          .addMessage(chatRoomId, messageId, messageInfoMap)
+          .then((value) {
+        Map<String, dynamic> lastMessageInfoMap = {
           "lastMessage": message,
           "lastMessageSendTs": lastMessageTs,
           "lastMessageSendBy": myName,
         };
 
         DatabaseMethod().updateLastMessageSend(chatRoomId, lastMessageInfoMap);
-
       });
-
+    }
   }
-}
+
   Widget chatMessageTile(String message, bool sendByMe) {
     return Row(
       mainAxisAlignment:
@@ -97,7 +94,8 @@ addMessage(){
       ],
     );
   }
- Widget chatMessages() {
+
+  Widget chatMessages() {
     return StreamBuilder(
       stream: messageStream,
       builder: (context, snapshot) {
@@ -108,31 +106,27 @@ addMessage(){
                 reverse: true,
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
-    return chatMessageTile(
-                      ds["message"], myName == ds["sendBy"]);
+                  return chatMessageTile(ds["message"], myName == ds["sendBy"]);
                 })
-                                
             : Center(child: CircularProgressIndicator());
       },
     );
-   }
+  }
 
-    getAndSetMessages() async {
-      messageStream = await DatabaseMethod().getChatRoomMessages(chatRoomId);
-          setState(() {});
-
- 
+  getAndSetMessages() async {
+    messageStream = await DatabaseMethod().getChatRoomMessages(chatRoomId);
+    setState(() {});
   }
 
   doThisOnLaunch() async {
     await getInfo();
     getAndSetMessages();
   }
+
   void initState() {
     doThisOnLaunch();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -140,71 +134,71 @@ addMessage(){
     Color primarycolor = Color(0xFF01afbd);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(widget.userName),
-      actions: [ IconButton(
-    icon: Icon(Icons.info),
-    onPressed: () => showDialog(
-      context: context,
-      builder: (context) =>  AlertDialog(
-      title: Text("Contact with "+ widget.userName+":"+"\n"+widget.email),
-    )
-    ),
-  )],
-    
-        centerTitle: true,
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(
-                "https://i.pinimg.com/originals/a9/13/12/a91312b7e47b919309dbc014a21053cc.jpg"),
-                fit: BoxFit.cover)),
-        child: Stack(
-          children: [
-            chatMessages(),
-            Container(
-              alignment: Alignment.bottomCenter,
-                          child: Container(
-                            decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.8),
-
-                              border: Border(top: BorderSide(color:Color(0xFF01afbd) ,width: 2))),
-                            padding: EdgeInsets.symmetric(horizontal:16,vertical:8),
-                child:Row(children: [
-                    Expanded(child: TextField(
-                                  controller: messageTextEdittingController,
-                                  decoration:      
-                                  InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "type a message",
-                                    hintStyle: TextStyle(fontWeight: FontWeight.w500,color: Colors.black.withOpacity(0.6))
-                                  )
-
-                    )),
-                    
-                  GestureDetector(
-                    onTap: (){
-                      addMessage();
-                        messageTextEdittingController.text = "";
-                      
-                    },
-                                      child: Icon(Icons.send,
-                    color: Color(0xFF01afbd),
-
-                    ),
-                  )]
-                  ,),
-              
-              ),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text(widget.userName),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.info),
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text("Contact with " +
+                            widget.userName +
+                            ":" +
+                            "\n" +
+                            widget.email),
+                      )),
             )
           ],
+          centerTitle: true,
         ),
-      )
-      
-    );
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(
+                      "https://i.pinimg.com/originals/a9/13/12/a91312b7e47b919309dbc014a21053cc.jpg"),
+                  fit: BoxFit.cover)),
+          child: Stack(
+            children: [
+              chatMessages(),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      border: Border(
+                          top: BorderSide(color: Color(0xFF01afbd), width: 2))),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: TextField(
+                              controller: messageTextEdittingController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "type a message",
+                                  hintStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black.withOpacity(0.6))))),
+                      GestureDetector(
+                        onTap: () {
+                          addMessage();
+                          messageTextEdittingController.text = "";
+                        },
+                        child: Icon(
+                          Icons.send,
+                          color: Color(0xFF01afbd),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
