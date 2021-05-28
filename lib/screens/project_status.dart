@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viisoft/screens/project_status_details.dart';
 
 class ProjectStatus extends StatefulWidget {
+  static String namedRoute = '/ProjectStatus';
   @override
   _ProjectStatusState createState() => _ProjectStatusState();
 }
@@ -14,163 +17,218 @@ class _ProjectStatusState extends State<ProjectStatus> {
   Widget build(BuildContext context) {
     final bool imageRight = false;
     final Size size = MediaQuery.of(context).size;
+
     List<Widget> lists = [
-      ListView(
-        scrollDirection: Axis.vertical,
-        padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-        children: [
-          Card(
-            elevation: 0.5,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(4.0),
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(ProjectStatusDetails.namedRoute);
-              },
-              child: Row(
-                children: [
-                  Container(
-                    height: 120,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: imageRight
-                          ? BorderRadius.only(
-                              topRight: Radius.circular(4.0),
-                              bottomRight: Radius.circular(4.0),
-                            )
-                          : BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              bottomLeft: Radius.circular(4.0),
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("Users")
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .collection("OngoingProjects")
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          List<QueryDocumentSnapshot> bodyData = snapshot.data.docs;
+          return ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                child: Stack(
+                  children: [
+                    Card(
+                      elevation: 0.5,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(4.0),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(ProjectStatusDetails.namedRoute);
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 120,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: imageRight
+                                    ? BorderRadius.only(
+                                        topRight: Radius.circular(4.0),
+                                        bottomRight: Radius.circular(4.0),
+                                      )
+                                    : BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        bottomLeft: Radius.circular(4.0),
+                                      ),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                      '${bodyData[index].data()["projImg"]}',
+                                    ),
+                                    fit: BoxFit.cover),
+                              ),
                             ),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/reg.jpg',
-                          ),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    width: 248.0,
-                    height: 129.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            'Cinema App',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w500,
+                            Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: 248.0,
+                              height: 129.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      '${bodyData[index].data()["projName"]}',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      'Developer Name: ${bodyData[index].data()["devName"]}',
+                                      style: TextStyle(
+                                          fontSize: 12.0, color: Colors.black),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      '${bodyData[index].data()["desc"]}',
+                                      style: TextStyle(
+                                          fontSize: 12.0, color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            softWrap: true,
-                          ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            'Flutter Project',
-                            style:
-                                TextStyle(fontSize: 12.0, color: Colors.black),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            'Developer Name : Bassem & Sandra',
-                            style:
-                                TextStyle(fontSize: 12.0, color: Colors.black),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
-      ListView(
-        scrollDirection: Axis.vertical,
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-        children: [
-          Card(
-            elevation: 0.5,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(4.0),
-              onTap: () {},
-              child: Row(
-                children: [
-                  Container(
-                    height: 120,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: imageRight
-                          ? BorderRadius.only(
-                              topRight: Radius.circular(4.0),
-                              bottomRight: Radius.circular(4.0),
-                            )
-                          : BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              bottomLeft: Radius.circular(4.0),
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("Users")
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .collection("DoneProjects")
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          List<QueryDocumentSnapshot> bodyData = snapshot.data.docs;
+          return ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                child: Stack(
+                  children: [
+                    Card(
+                      elevation: 0.5,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(4.0),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(ProjectStatusDetails.namedRoute);
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 120,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: imageRight
+                                    ? BorderRadius.only(
+                                        topRight: Radius.circular(4.0),
+                                        bottomRight: Radius.circular(4.0),
+                                      )
+                                    : BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        bottomLeft: Radius.circular(4.0),
+                                      ),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                      '${bodyData[index].data()["projImg"]}',
+                                    ),
+                                    fit: BoxFit.cover),
+                              ),
                             ),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/reg.jpg',
-                          ),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    width: 248.0,
-                    height: 129.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            'Cinema App',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w500,
+                            Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: 248.0,
+                              height: 129.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      '${bodyData[index].data()["projName"]}',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      'Developer Name: ${bodyData[index].data()["devName"]}',
+                                      style: TextStyle(
+                                          fontSize: 12.0, color: Colors.black),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      '${bodyData[index].data()["desc"]}',
+                                      style: TextStyle(
+                                          fontSize: 12.0, color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            softWrap: true,
-                          ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            'Flutter Project',
-                            style:
-                                TextStyle(fontSize: 12.0, color: Colors.black),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            'Developer Name : Bassem & Sandra',
-                            style:
-                                TextStyle(fontSize: 12.0, color: Colors.black),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     ];
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -199,6 +257,7 @@ class _ProjectStatusState extends State<ProjectStatus> {
     );
   }
 }
+
 // Card(
 //             child: Column(
 //               mainAxisAlignment: MainAxisAlignment.start,
