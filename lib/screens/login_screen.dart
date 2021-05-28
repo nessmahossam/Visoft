@@ -37,15 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Text('Login'),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+                SizedBox(
+                        height: size.height * 0.09,
+                      ),
               Image.asset(
                 'assets/images/authentication.png',
                 fit: BoxFit.contain,

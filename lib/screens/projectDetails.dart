@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:viisoft/widgets/projectImges.dart';
 import 'package:viisoft/widgets/projectInfo.dart';
 
@@ -26,15 +28,6 @@ class projectDetails extends StatefulWidget {
 
 class _projectDetailsState extends State<projectDetails> {
   PageController pagecontroller;
-  // List<String> imgs = [
-  //   "assets/images/web1.1.png",
-  //   "assets/images/web1.2.png",
-  //   "assets/images/web1.3.png",
-  //   "assets/images/web1.4.png",
-  //   "assets/images/web1.5.png",
-  //   "assets/images/web1.6.png",
-  //   "assets/images/web1.7.png"
-  // ];
 
   @override
   void initState() {
@@ -44,6 +37,7 @@ class _projectDetailsState extends State<projectDetails> {
 
   @override
   Widget build(BuildContext context) {
+      final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
@@ -124,7 +118,15 @@ class _projectDetailsState extends State<projectDetails> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
-                      Icon(Icons.thumb_up_alt),
+                      IconButton(
+                        icon: Icon(
+                          FontAwesomeIcons.solidThumbsUp,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        onPressed: () async{
+                        },
+                      ),
                       SizedBox(
                         width: 5,
                       ),

@@ -109,16 +109,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset(
-              'assets/images/reg.jpg',
-              height: 250,
-            ),
-            RegLoginText(
-              title: 'Register!',
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                  SizedBox(
+                        height: size.height * 0.02,
+                      ),
                 MyTextField(
                   textEditingController: _nameController,
                   labelText: 'User Name',
@@ -334,13 +330,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset(
-              'assets/images/reg.jpg',
-              height: 250,
-            ),
-            RegLoginText(
-              title: 'Register!',
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -515,12 +504,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          // backgroundColor: Theme.of(context).backgroundColor,
-          title: Text(
-            'Visoft',
-            // style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-          centerTitle: true,
           bottom: TabBar(
             tabs: [
               Tab(
