@@ -7,10 +7,20 @@ import 'package:viisoft/widgets/projectInfo.dart';
 import 'mainScreen.dart';
 
 class projectDetails extends StatefulWidget {
-  String title, price, deveName, deveImg, likes, dislikes, date, desc, toolUsed;
+  String userId,
+      title,
+      price,
+      deveName,
+      deveImg,
+      likes,
+      dislikes,
+      date,
+      desc,
+      toolUsed;
   List listOfImages = [];
 
   projectDetails(
+      this.userId,
       @required this.title,
       @required this.price,
       @required this.deveName,
@@ -172,6 +182,7 @@ class _projectDetailsState extends State<projectDetails> {
                         context: context,
                         builder: (BuildContext context) {
                           return ProjectInfo(
+                              widget.userId,
                               widget.title,
                               widget.price,
                               widget.deveName,

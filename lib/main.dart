@@ -8,6 +8,7 @@ import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/onboarding_screen.dart';
 import 'package:viisoft/screens/payment_screen.dart';
+import 'package:viisoft/screens/project_status.dart';
 // import 'package:viisoft/screens/payment.dart'';
 import 'package:viisoft/screens/project_status_details.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
         WelcomeScreen.namedRoute: (ctx) => WelcomeScreen(),
         ProjectStatusDetails.namedRoute: (ctx) => ProjectStatusDetails(),
         PaymentScreen.namedRoute: (ctx) => PaymentScreen(),
+        ProjectStatus.namedRoute: (ctx) => ProjectStatus(),
         // ChatScreen.namedRoute: (ctx) => ChatScreen(),
       },
     );
