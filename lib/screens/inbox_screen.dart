@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:viisoft/models/firebase_fn.dart';
 import 'package:viisoft/screens/register_screen.dart';
@@ -74,7 +75,7 @@ String myId, myName;
   Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ChatScreen(name,email,id)));        
+                      builder: (context) => ChatScreen( myName ,name)));        
       },
           child: Row(
          crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,46 +133,6 @@ String myId, myName;
       },
     );
   }
-
-
-  List list = [
-    {
-      "time": DateTime.now(),
-      "imageUrl":
-          "https://i.pinimg.com/736x/27/d7/c8/27d7c8f75f772b5ce700e39d99fdf080.jpg",
-      "groupName": "Sasha",
-      "lastMessage":
-          "i need you to make a small project for me are you ready for award ?"
-    },
-    // {
-    //   "time": DateTime.now(),
-    //   "imageUrl":
-    //       "https://i.pinimg.com/736x/27/d7/c8/27d7c8f75f772b5ce700e39d99fdf080.jpg",
-    //   "groupName": "Mekasa",
-    //   "lastMessage": "Hi"
-    // },
-    // {
-    //   "time": DateTime.now(),
-    //   "imageUrl":
-    //       "https://i.pinimg.com/736x/27/d7/c8/27d7c8f75f772b5ce700e39d99fdf080.jpg",
-    //   "groupName": "Sasha",
-    //   "lastMessage": "Iam Dead :("
-    // },
-    // {
-    //   "time": DateTime.now(),
-    //   "imageUrl":
-    //       "https://i.pinimg.com/736x/27/d7/c8/27d7c8f75f772b5ce700e39d99fdf080.jpg",
-    //   "groupName": "Sasha",
-    //   "lastMessage": "Iam Dead :("
-    // },
-    // {
-    //   "time": DateTime.now(),
-    //   "imageUrl":
-    //       "https://i.pinimg.com/736x/27/d7/c8/27d7c8f75f772b5ce700e39d99fdf080.jpg",
-    //   "groupName": "Sasha",
-    //   "lastMessage": "Iam Dead :("
-    // },
-  ];
 
   getChatRooms()async{
     chatRoomsStream = await DatabaseMethod().getChatRooms();
@@ -259,125 +220,10 @@ String myId, myName;
                   isSearching ? searchUsersList() : chatRoomsList()
                 ]))
 
-        // MyTextField(
-        //   textEditingController: searchController,
-        //   labelText: 'Enter Client of Developer name',
-        //   textInputType: TextInputType.text,
-        //
-        //  ),
 
         );
 
-    // ListView.builder(
-    //     itemCount: list.length,
-    //     itemBuilder: (context, index) {
-    //       DateTime time = list[index]['time'];
-    //
-    //       return Dismissible(
-    //         key: Key("123"),
-    //         direction: DismissDirection.endToStart,
-    //         onDismissed: (direction) {},
-    //         background: Container(
-    //           child: Icon(
-    //             Icons.delete,
-    //             size: 30,
-    //             color: Colors.white70,
-    //           ),
-    //           color: Theme.of(context).primaryColor,
-    //           alignment: AlignmentDirectional.centerEnd,
-    //         ),
-    //         child: InkWell(
-    //           // this is your function
-    //           onTap: () {
-    //             Navigator.push(
-    //               context,
-    //               MaterialPageRoute(
-    //                   builder: (context) => ChatScreen(
-    //                         userName: "bassem",
-    //                         userID: 123,
-    //                         groupName: "Sasha",
-    //                         // messageList: "widget.messageList",
-    //                         // rightColor: widget.rightColor,
-    //                         // leftColor: widget.leftColor,
-    //                         // groupID: list[index].documentID,
-    //                         // imageurl: widget.imageurl,
-    //                       )),
-    //             );
-    //           },
-    //           child: Column(
-    //             children: <Widget>[
-    //               Container(
-    //                 padding:
-    //                     EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    //                 child: Row(
-    //                   children: <Widget>[
-    //                     Container(
-    //                       decoration: BoxDecoration(
-    //                           border: Border.all(
-    //                               width: 3.5,
-    //                               color: Theme.of(context).primaryColor),
-    //                           shape: BoxShape.circle,
-    //                           boxShadow: [
-    //                             BoxShadow(
-    //                                 color: Colors.grey.withOpacity(0.5),
-    //                                 spreadRadius: 3,
-    //                                 blurRadius: 3),
-    //                           ]),
-    //                       child: CircleAvatar(
-    //                         radius: 35,
-    //                         backgroundImage:
-    //                             NetworkImage(list[index]['imageUrl']),
-    //                       ),
-    //                     ),
-    //                     Container(
-    //                       width: size.width * 0.65,
-    //                       padding: EdgeInsets.only(left: 20),
-    //                       child: Column(
-    //                         children: <Widget>[
-    //                           Row(
-    //                             mainAxisAlignment:
-    //                                 MainAxisAlignment.spaceBetween,
-    //                             children: <Widget>[
-    //                               Text(
-    //                                 list[index]['groupName'],
-    //                                 style: TextStyle(
-    //                                     fontSize: 16,
-    //                                     fontWeight: FontWeight.bold,
-    //                                     color: Colors.black),
-    //                               ),
-    //                               Text(
-    //                                 timeago.format(time),
-    //                                 style: TextStyle(
-    //                                     fontSize: 13,
-    //                                     fontWeight: FontWeight.w500,
-    //                                     color: Colors.black54),
-    //                               )
-    //                             ],
-    //                           ),
-    //                           SizedBox(
-    //                             height: 10,
-    //                           ),
-    //                           Container(
-    //                             child: Align(
-    //                                 alignment: Alignment.bottomLeft,
-    //                                 child: Text(
-    //                                   list[index]['lastMessage'],
-    //                                   style: TextStyle(
-    //                                       color: Colors.black54,
-    //                                       fontSize: 15),
-    //                                 )),
-    //                           )
-    //                         ],
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       );
-    //     })
+  
   }
 }
 class ChatRoomListTile extends StatefulWidget {
@@ -391,16 +237,20 @@ class ChatRoomListTile extends StatefulWidget {
 class _ChatRoomListTileState extends State<ChatRoomListTile> {
 
   String profilePicUrl = "assets/images/profile.png", name = "", username = "",email="",id;
+  String mmm;
 
   getThisUserInfo() async {
     username = widget.chatRoomId.replaceAll(widget.myUsername, "").replaceAll("_", "");
 
-    QuerySnapshot querySnapshot = await DatabaseMethod().getUserInfo(username);
-          name = "${querySnapshot.docs[0]["Name"]}";
-          email = "${querySnapshot.docs[0]["Mail"]}";
 
-    id =querySnapshot.docs[0]["uid"];
-    // profilePicUrl = "${querySnapshot.docs[0]["imgUrl"]}";
+    QuerySnapshot querySnapshot = await DatabaseMethod().getUserInfo(username);
+    querySnapshot.docs.forEach((element) {
+      name = element['Name'];
+    });
+
+          // mmm = querySnapshot.docs[0]["Name"];
+          // email = querySnapshot.docs[0]["Mail"];
+          //    id ="${querySnapshot.docs[0]["uid"]}";
     setState(() {});
   }
 
@@ -417,37 +267,74 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(name,email,id)));
+                builder: (context) => ChatScreen( username,name)));
       },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-
-          children: [
-                    Image.asset(profilePicUrl, height: 50, width: 50),        
-            SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  username,
-                  style: TextStyle(fontSize: 16,color: Colors.black),
-                ),
-                SizedBox(height: 3),
-                          Text(widget.lastMessage,
-                  style :TextStyle(fontSize: 16,color: Colors.black),
-               
-                  ),
-                     Text(
-                    email,
-                  style :TextStyle(fontSize: 16,color: Colors.black))
-               
-              ],
-            )
-          ],
-        ),
-      ),
+      child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 3.5,
+                                        color: Theme.of(context).primaryColor),
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 3,
+                                          blurRadius: 3),
+                                    ]),
+                                child: CircleAvatar(
+                                  radius: 35,
+                                  backgroundImage:
+                                      AssetImage("assets/images/profile.png"),
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.65,
+                                padding: EdgeInsets.only(left: 20),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          username,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        ),
+                                  
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      child: Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Text(
+                                            widget.lastMessage,
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 15),
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
     );
+    
   }
 }

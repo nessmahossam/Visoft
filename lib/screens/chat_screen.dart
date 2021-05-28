@@ -8,15 +8,15 @@ import 'package:viisoft/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   static String namedRoute = '/ChatScreen';
-  final String userName;
+  final String userName,myName;
   String userID ;
   String email;
 String profImg = 'assets/images/user.png';
   ChatScreen(    
       this.userName,
-      this.email,
-      this.userID   
-   );
+      this.myName,
+  );
+  
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -28,17 +28,17 @@ class _ChatScreenState extends State<ChatScreen> {
   Stream messageStream;
   String chatRoomId, messageId= " ";
 
- String myId , myEmail;
- String myName = currentUser.data()['Name'];
+ String myId , myEmail ;
+  String myName = currentUser.data()['Name'];
 
   getInfo()async{
     myEmail = currentUser.data()['Mail'];
     myId = currentUser.data()['uid'];
-    chatRoomId = getChatRoomIdByUserIDs(widget.userName, myName);
+    chatRoomId = getChatRoomIdByUserNames(widget.userName, myName);
 
 
   }
-    getChatRoomIdByUserIDs(String a, String b) {
+    getChatRoomIdByUserNames(String a, String b) {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
       return "$b\_$a";
     } else {
