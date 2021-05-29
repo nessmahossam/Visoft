@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       MyTextField(
                         textEditingController: emailController,
                         labelText: 'Your Email',
-                        textInputType: TextInputType.text,
+                        textInputType: TextInputType.emailAddress,
                         validate: (value) {
                           if (value.isEmpty) {
                             return 'please enter valid email';
@@ -115,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (userCredential != null) {
                                 print(userCredential.user.uid);
                                 retriveInfo(context);
+                                retrivePaymentInfo(context);
                               }
                             } on FirebaseAuthException catch (e) {
                               print('Failed with error code: ${e.code}');

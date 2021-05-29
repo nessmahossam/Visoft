@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viisoft/screens/payment_screen.dart';
+import 'package:viisoft/screens/wallet_screen.dart';
 
 class ProjectInfo extends StatelessWidget {
   String devId,
@@ -200,15 +201,19 @@ class ProjectInfo extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return PaymentScreen(
-                          devId: devId,
-                          projName: projName,
-                          price: price,
-                          deveName: deveName,
-                          desc: desc,
-                          projImg: imagPath,
+                        // return PaymentScreen(
+                        //   devId: devId,
+                        //   projName: projName,
+                        //   price: price,
+                        //   deveName: deveName,
+                        //   desc: desc,
+                        //   projImg: imagPath,
+                        // );
+                        return WalletScreen(
+                          isBuy: true,
                         );
                       }));
+                      // Navigator.pushNamed(context, WalletScreen.namedRoute);
                     },
                     color: Theme.of(context).primaryColor,
                     child: Text(

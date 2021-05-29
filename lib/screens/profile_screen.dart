@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/mainScreen.dart';
+import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -344,6 +346,11 @@ class ProfileImgAndRating extends StatelessWidget {
 class InfoContainer extends StatelessWidget {
   const InfoContainer();
 
+  String formatTimestamp(Timestamp date) {
+    var format = new DateFormat('y-MM-d'); // 'hh:mm' for hour & min
+    return format.format(date.toDate());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -394,7 +401,7 @@ class InfoContainer extends StatelessWidget {
               size: 40,
               color: Theme.of(context).primaryColor,
             ),
-            subtitle: Text("21/2/1999",
+            subtitle: Text("21/09/1999",
                 style: TextStyle(color: Theme.of(context).accentColor)),
             title: Text(
               'Date Of Birth',

@@ -11,6 +11,7 @@ import 'package:viisoft/screens/profile_screen.dart';
 import 'package:viisoft/screens/project_status.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:viisoft/screens/login_screen.dart';
+import 'package:viisoft/screens/wallet_screen.dart';
 
 import 'home_screen.dart';
 
@@ -105,12 +106,27 @@ class _MainScreenState extends State<MainScreen> {
                             )),
                       ),
                       ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            // return PaymentScreen(
+                            //   devId: devId,
+                            //   projName: projName,
+                            //   price: price,
+                            //   deveName: deveName,
+                            //   desc: desc,
+                            //   projImg: imagPath,
+                            // );
+                            return WalletScreen(
+                              isBuy: false,
+                            );
+                          }));
+                        },
                         leading: Icon(
-                          Icons.track_changes,
+                          Icons.account_balance_wallet,
                           color: Colors.white,
                         ),
-                        title: Text('dummy',
+                        title: Text('Wallet',
                             style: TextStyle(
                               color: Colors.white,
                             )),
