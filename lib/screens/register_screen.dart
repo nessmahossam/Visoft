@@ -241,6 +241,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'DOB': _dobController,
                                   'TypeCustomer': isCustomer,
                                   'BoughtProjects': projectsList,
+                                  'cash': '0',
+                                  'creditDebt': '0',
                                 },
                               ))
                           .then((value) {
@@ -465,6 +467,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'DOB': _dobController,
                                 'TypeCustomer': !isCustomer,
                                 'DevelopedProjects': projectsList,
+                                'cash': '0',
+                                'creditDebt': '0',
                               },
                             ))
                         .then((value) {

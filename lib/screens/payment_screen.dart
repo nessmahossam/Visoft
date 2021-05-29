@@ -84,7 +84,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           )),
-                          labelText: 'Number',
+                          labelText: 'Card Number',
                           hintText: 'XXXX XXXX XXXX XXXX',
                         ),
                         expiryDateDecoration: InputDecoration(
@@ -146,7 +146,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               borderRadius: BorderRadius.circular(30.0)),
                           child: FlatButton(
                             child: Text(
-                              "Buy Project",
+                              "Save",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
@@ -160,40 +160,53 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               //   print('invalid!');
                               // }
 
-                              //To save at client's collection
                               FirebaseFirestore.instance
                                   .collection("Users")
                                   .doc(FirebaseAuth.instance.currentUser.uid)
-                                  .collection("OngoingProjects")
-                                  .doc(widget.projName)
+                                  .collection("Payment")
+                                  .doc(cardNumber)
                                   .set({
-                                'clientId':
-                                    FirebaseAuth.instance.currentUser.uid,
-                                'devName': widget.deveName,
-                                'projName': widget.projName,
-                                'price': widget.price,
-                                'desc': widget.desc,
-                                'projImg': widget.projImg
+                                'cardHolder': cardHolderName,
+                                'credit number': cardNumber,
+                                'cvv': cvvCode,
+                                'earned': '0',
+                                'expDate': expiryDate,
+                                'spent': '0'
                               });
 
-                              //To save at developer's collections
-                              FirebaseFirestore.instance
-                                  .collection("Users")
-                                  .doc(widget.devId)
-                                  .collection("OngoingProjects")
-                                  .doc(widget.projName)
-                                  .set({
-                                'clientId':
-                                    FirebaseAuth.instance.currentUser.uid,
-                                'devName': widget.deveName,
-                                'projName': widget.projName,
-                                'price': widget.price,
-                                'desc': widget.desc,
-                                'projImg': widget.projImg
-                              });
+                              //To save at client's collection
+                              // FirebaseFirestore.instance
+                              //     .collection("Users")
+                              //     .doc(FirebaseAuth.instance.currentUser.uid)
+                              //     .collection("OngoingProjects")
+                              //     .doc(widget.projName)
+                              //     .set({
+                              //   'clientId':
+                              //       FirebaseAuth.instance.currentUser.uid,
+                              //   'devName': widget.deveName,
+                              //   'projName': widget.projName,
+                              //   'price': widget.price,
+                              //   'desc': widget.desc,
+                              //   'projImg': widget.projImg
+                              // });
 
-                              Navigator.pushNamed(
-                                  context, ProjectStatus.namedRoute);
+                              // //To save at developer's collections
+                              // FirebaseFirestore.instance
+                              //     .collection("Users")
+                              //     .doc(widget.devId)
+                              //     .collection("OngoingProjects")
+                              //     .doc(widget.projName)
+                              //     .set({
+                              //   'clientId':
+                              //       FirebaseAuth.instance.currentUser.uid,
+                              //   'devName': widget.deveName,
+                              //   'projName': widget.projName,
+                              //   'price': widget.price,
+                              //   'desc': widget.desc,
+                              //   'projImg': widget.projImg
+                              // });
+
+                              Navigator.pop(context);
                             },
                           ))
                     ],

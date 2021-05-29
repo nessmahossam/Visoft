@@ -19,6 +19,7 @@ const RegisterAndLoginText = Padding(
 );
 DocumentSnapshot currentUser;
 List<QueryDocumentSnapshot> myProjects;
+List<QueryDocumentSnapshot> myCredits;
 showAlert(AlertType alertType, String title, List<DialogButton> listOfButtons,
     bool isCloseButton, bool isOverLayTapDismiss, BuildContext context) {
   var alertStyle = AlertStyle(
@@ -130,5 +131,25 @@ void retriveInfo(BuildContext context) {
   }).then((value) {
     Navigator.of(context).pop();
     Navigator.of(context).pushReplacementNamed(MainScreen.namedRoute);
+  });
+}
+
+void retrivePaymentInfo(BuildContext context) {
+  FirebaseFirestore.instance
+      .collection("Users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .get()
+      .then((value) {
+    print(value.data());
+    currentUser = value;
+
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("Payment")
+        .get()
+        .then((value) {
+      myCredits = value.docs;
+    });
   });
 }
