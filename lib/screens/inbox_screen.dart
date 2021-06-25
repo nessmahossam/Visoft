@@ -56,82 +56,83 @@ class _InboxScreenState extends State<InboxScreen> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
-                  return ChatRoomListTile(ds["lastMessage"], ds.id, myName);
+                  return ChatRoomListTile(ds["lastMessage"], ds.id, myName,
+                      ds['clientId'], ds['devID'], ds['projName']);
                 })
             : Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  Widget searchListUserTile({String name, email, id}) {
-    return GestureDetector(
-      onTap: () {
-        var chatRoomId = getChatRoomIdByUserIDs(name, myName);
-        Map<String, dynamic> chatRoomInfoMap = {
-          "users": [name, myName]
-        };
-        DatabaseMethod().createChatRoom(chatRoomId, chatRoomInfoMap);
+  // Widget searchListUserTile({String name, email, id}) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       var chatRoomId = getChatRoomIdByUserIDs(name, myName);
+  //       Map<String, dynamic> chatRoomInfoMap = {
+  //         "users": [name, myName]
+  //       };
+  //       DatabaseMethod().createChatRoom(chatRoomId, chatRoomInfoMap);
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ChatScreen(myName, name)));
-      },
-      child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset(profImg, height: 50, width: 50),
-            SizedBox(width: 12),
-            SizedBox(height: 30),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(name,
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16)),
-                  Text(email,
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16)),
-                  SizedBox(height: 30),
-                ])
-          ]),
-    );
-  }
+  //       Navigator.push(context,
+  //           MaterialPageRoute(builder: (context) => ChatScreen(myName, name)));
+  //     },
+  //     child: Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         mainAxisAlignment: MainAxisAlignment.start,
+  //         children: [
+  //           Image.asset(profImg, height: 50, width: 50),
+  //           SizedBox(width: 12),
+  //           SizedBox(height: 30),
+  //           Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               children: [
+  //                 Text(name,
+  //                     style: TextStyle(
+  //                         color: Colors.blueGrey,
+  //                         fontWeight: FontWeight.bold,
+  //                         fontSize: 16)),
+  //                 Text(email,
+  //                     style: TextStyle(
+  //                         color: Colors.blueGrey,
+  //                         fontWeight: FontWeight.bold,
+  //                         fontSize: 16)),
+  //                 SizedBox(height: 30),
+  //               ])
+  //         ]),
+  //   );
+  // }
 
-  Widget searchUsersList() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: userStream,
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          Text('Something went wrong',
-              style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16));
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-        return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
-                  return searchListUserTile(
-                      name: ds.data()['Name'],
-                      email: ds.data()['Mail'],
-                      id: ds.data()['uid']);
-                },
-              )
-            : Container();
-      },
-    );
-  }
+  // Widget searchUsersList() {
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: userStream,
+  //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //       if (snapshot.hasError) {
+  //         Text('Something went wrong',
+  //             style: TextStyle(
+  //                 color: Colors.blueGrey,
+  //                 fontWeight: FontWeight.bold,
+  //                 fontSize: 16));
+  //       }
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return CircularProgressIndicator();
+  //       }
+  //       return snapshot.hasData
+  //           ? ListView.builder(
+  //               itemCount: snapshot.data.docs.length,
+  //               shrinkWrap: true,
+  //               itemBuilder: (context, index) {
+  //                 DocumentSnapshot ds = snapshot.data.docs[index];
+  //                 return searchListUserTile(
+  //                     name: ds.data()['Name'],
+  //                     email: ds.data()['Mail'],
+  //                     id: ds.data()['uid']);
+  //               },
+  //             )
+  //           : Container();
+  //     },
+  //   );
+  // }
 
   getChatRooms() async {
     chatRoomsStream = await DatabaseMethod().getChatRooms();
@@ -221,14 +222,15 @@ class _InboxScreenState extends State<InboxScreen> {
                       ),
                     )
                   ]),
-                  isSearching ? searchUsersList() : chatRoomsList()
+                  isSearching ? SizedBox() : chatRoomsList()
                 ])));
   }
 }
 
 class ChatRoomListTile extends StatefulWidget {
-  final String lastMessage, chatRoomId, myUsername;
-  ChatRoomListTile(this.lastMessage, this.chatRoomId, this.myUsername);
+  final String lastMessage, chatRoomId, myUsername, devID, clientID, projName;
+  ChatRoomListTile(this.lastMessage, this.chatRoomId, this.myUsername,
+      this.clientID, this.devID, this.projName);
 
   @override
   _ChatRoomListTileState createState() => _ChatRoomListTileState();
@@ -270,7 +272,8 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(username, name)));
+                builder: (context) => ChatScreen(username, name, widget.devID,
+                    widget.clientID, widget.projName)));
       },
       child: Column(
         children: <Widget>[
