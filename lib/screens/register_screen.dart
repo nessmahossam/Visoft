@@ -7,6 +7,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
+import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
 import 'package:viisoft/widgets/reg_login_text.dart';
@@ -473,7 +474,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ))
                         .then((value) {
                       clearForm();
-                      Navigator.pushNamed(context, LoginScreen.namedRoute);
+                      Navigator.pushNamed(context, MainScreen.namedRoute);
                     });
                   },
                 ),

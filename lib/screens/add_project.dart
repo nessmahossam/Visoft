@@ -93,7 +93,6 @@ class _AddProjectState extends State<AddProject> {
         setState(() {
           _mainImguploadedFileURL = fileURL;
           print('img url: $fileURL');
-          _ssImguploadedFileURL.add(fileURL);
         });
       });
     } on FirebaseException catch (e) {
@@ -128,6 +127,7 @@ class _AddProjectState extends State<AddProject> {
     // TODO: implement initState
     super.initState();
     _mainImage = null;
+    _ssImguploadedFileURL.clear();
   }
 
   void clearTextFields() {
