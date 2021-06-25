@@ -18,17 +18,18 @@ class projectDetails extends StatefulWidget {
   List listOfImages = [];
 
   projectDetails(
-      this.userId,
-      @required this.title,
-      @required this.price,
-      @required this.deveName,
-      @required this.deveImg,
-      this.listOfImages,
-      this.likes,
-      this.dislikes,
-      this.date,
-      this.desc,
-      this.toolUsed);
+    this.userId,
+    @required this.title,
+    @required this.price,
+    @required this.deveName,
+    @required this.deveImg,
+    this.listOfImages,
+    this.likes,
+    this.dislikes,
+    this.date,
+    this.desc,
+    this.toolUsed,
+  );
 
   @override
   _projectDetailsState createState() => _projectDetailsState();
@@ -117,8 +118,9 @@ class _projectDetailsState extends State<projectDetails> {
               height: 10,
             ),
             Container(
-              height: 600,
+              height: 250 * (widget.listOfImages.length.toDouble()),
               child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: widget.listOfImages.length,
                 itemBuilder: (context, index) {
                   return ProjectImges(widget.listOfImages[index]);

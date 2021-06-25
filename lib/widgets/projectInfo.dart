@@ -199,21 +199,28 @@ class ProjectInfo extends StatelessWidget {
                   RaisedButton(
                     disabledColor: Colors.red,
                     onPressed: () {
+                      // print(deveName);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         // return PaymentScreen(
-                        //   devId: devId,
-                        //   projName: projName,
-                        //   price: price,
-                        //   deveName: deveName,
-                        //   desc: desc,
-                        //   projImg: imagPath,
+                        // devId: devId,
+                        // projName: projName,
+                        // price: price,
+                        // deveName: deveName,
+                        // desc: desc,
+                        // projImg: imagPath,
                         // );
+                        print(devId);
                         return WalletScreen(
                           isBuy: true,
+                          devId: devId,
+                          projName: projName,
+                          price: price,
+                          devName: deveName,
+                          desc: desc,
+                          projImg: imagPath,
                         );
                       }));
-                      // Navigator.pushNamed(context, WalletScreen.namedRoute);
                     },
                     color: Theme.of(context).primaryColor,
                     child: Text(

@@ -46,6 +46,7 @@ class _AddProjectState extends State<AddProject> {
   // File _screensImage;
   String _mainImguploadedFileURL;
   List<String> _ssImguploadedFileURL = [];
+
   final picker = ImagePicker();
   TextEditingController projectName = TextEditingController();
   TextEditingController desc = TextEditingController();
@@ -92,7 +93,10 @@ class _AddProjectState extends State<AddProject> {
       reference.getDownloadURL().then((fileURL) {
         setState(() {
           _mainImguploadedFileURL = fileURL;
+<<<<<<< HEAD
           print('img url: $fileURL');
+=======
+>>>>>>> master
         });
       });
     } on FirebaseException catch (e) {
