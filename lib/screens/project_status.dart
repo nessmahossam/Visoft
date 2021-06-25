@@ -48,6 +48,8 @@ class _ProjectStatusState extends State<ProjectStatus> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4.0),
                         onTap: () {
+                          ProjectStatusDetails.docId =
+                              snapshot.data.docs[index].id;
                           Navigator.of(context)
                               .pushNamed(ProjectStatusDetails.namedRoute);
                         },

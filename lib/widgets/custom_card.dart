@@ -26,7 +26,8 @@ class CustomCard extends StatelessWidget {
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile(
               title: Text(

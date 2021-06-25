@@ -3,18 +3,44 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
+import 'package:viisoft/models/firebase_fn.dart';
 import 'package:viisoft/screens/payment_screen.dart';
+import 'package:viisoft/screens/project_status.dart';
 import 'package:viisoft/screens/wallet_detials_screen.dart';
 
 class WalletScreen extends StatefulWidget {
   bool isBuy = false;
-  WalletScreen({this.isBuy});
+
+  String devId, projName, price, devName, desc, projImg;
+  WalletScreen(
+      {this.isBuy,
+      this.devId,
+      this.projName,
+      this.price,
+      this.devName,
+      this.desc,
+      this.projImg});
   static String namedRoute = '/walletScreen';
   @override
   _WalletScreenState createState() => _WalletScreenState();
 }
 
 class _WalletScreenState extends State<WalletScreen> {
+  getChatRoomIdByUserIDs(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.price);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +141,95 @@ class _WalletScreenState extends State<WalletScreen> {
                                             onPressed: () {
                                               // Confirm Payment
                                               // Function of payment
+                                              FirebaseFirestore.instance
+                                                  .collection("Users")
+                                                  .doc(FirebaseAuth
+                                                      .instance.currentUser.uid)
+                                                  .collection("OngoingProjects")
+                                                  .doc(widget.projName)
+                                                  .set({
+                                                'clientId': FirebaseAuth
+                                                    .instance.currentUser.uid,
+                                                'devName': widget.devName,
+                                                'projName': widget.projName,
+                                                "devID": widget.devId,
+                                                'price': widget.price,
+                                                'desc': widget.desc,
+                                                'projImg': widget.projImg
+                                              });
+
+                                              //To save at developer's collections
+                                              FirebaseFirestore.instance
+                                                  .collection("Users")
+                                                  .doc(widget.devId)
+                                                  .collection("OngoingProjects")
+                                                  .doc(widget.projName)
+                                                  .set({
+                                                'clientId': FirebaseAuth
+                                                    .instance.currentUser.uid,
+                                                'devName': widget.devName,
+                                                'projName': widget.projName,
+                                                "devID": widget.devId,
+                                                'price': widget.price,
+                                                'desc': widget.desc,
+                                                'projImg': widget.projImg
+                                              });
+                                              //chatSection
+                                              var chatRoomId =
+                                                  getChatRoomIdByUserIDs(
+                                                      widget.devName,
+                                                      currentUser
+                                                          .data()['Name']
+                                                          .toString());
+                                              Map<String, dynamic>
+                                                  chatRoomInfoMap = {
+                                                "users": [
+                                                  widget.devName,
+                                                  currentUser.data()['Name']
+                                                ]
+                                              };
+                                              DatabaseMethod().createChatRoom(
+                                                  chatRoomId, chatRoomInfoMap);
+
+                                              String message =
+                                                  "I Want To Buy ${widget.projName} project with \$ ${widget.price} can you edit it for me ? ";
+                                              var lastMessageTs =
+                                                  DateTime.now();
+                                              Map<String, dynamic>
+                                                  messageInfoMap = {
+                                                "message": message,
+                                                "sendBy":
+                                                    currentUser.data()['Name'],
+                                                "isMileStone": true,
+                                                "ts": lastMessageTs,
+                                              };
+
+                                              DatabaseMethod()
+                                                  .addMessage(chatRoomId, "",
+                                                      messageInfoMap)
+                                                  .then((value) {
+                                                Map<String, dynamic>
+                                                    lastMessageInfoMap = {
+                                                  "lastMessage": message,
+                                                  "lastMessageSendTs":
+                                                      lastMessageTs,
+                                                  "lastMessageSendBy":
+                                                      currentUser
+                                                          .data()['Name'],
+                                                  'projName': widget.projName,
+                                                  "devID": widget.devId,
+                                                  'clientId': FirebaseAuth
+                                                      .instance.currentUser.uid,
+                                                };
+
+                                                DatabaseMethod()
+                                                    .updateLastMessageSend(
+                                                        chatRoomId,
+                                                        lastMessageInfoMap);
+                                              });
+
+                                              Navigator.pushNamed(context,
+                                                  ProjectStatus.namedRoute);
                                             }),
                                         DialogButton(
                                             child:

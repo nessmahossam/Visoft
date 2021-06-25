@@ -45,10 +45,7 @@ class MyApp extends StatelessWidget {
         // bottomAppBarColor: Colors.red,
         textTheme: TextTheme(
           headline1: TextStyle(
-            fontSize: 40.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+              fontSize: 40.0, fontWeight: FontWeight.bold, color: Colors.white),
           headline5: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.bold,
