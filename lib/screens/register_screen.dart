@@ -7,6 +7,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
+import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
 import 'package:viisoft/widgets/reg_login_text.dart';
@@ -36,6 +37,7 @@ bool isCustomer = true;
 List<String> projectsList = [];
 
 final _auth = FirebaseAuth.instance;
+List bp = [];
 
 List<String> genderList = [
   ' ',
@@ -112,9 +114,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                  SizedBox(
-                        height: size.height * 0.02,
-                      ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
                 MyTextField(
                   textEditingController: _nameController,
                   labelText: 'User Name',
@@ -237,8 +239,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'DOB': _dobController,
                                   'TypeCustomer': isCustomer,
                                   'BoughtProjects': projectsList,
-                                  'cash': '0',
-                                  'creditDebt': '0',
+                                  'cash': 0,
+                                  'creditDebt': 0,
+                                  'bp': [],
                                 },
                               ))
                           .then((value) {
@@ -462,7 +465,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ))
                         .then((value) {
                       clearForm();
-                      Navigator.pushNamed(context, LoginScreen.namedRoute);
+                      Navigator.pushNamed(context, MainScreen.namedRoute);
                     });
                   },
                 ),

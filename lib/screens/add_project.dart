@@ -127,6 +127,7 @@ class _AddProjectState extends State<AddProject> {
     // TODO: implement initState
     super.initState();
     _mainImage = null;
+    _ssImguploadedFileURL.clear();
   }
 
   void clearTextFields() {
