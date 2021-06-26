@@ -36,6 +36,7 @@ dependencies:
   cloud_firestore: ^1.0.5
   flutter_vector_icons: ^1.0.0
   rating_bar: ^0.2.0
+  google_fonts: ^2.0.0
 
 
 
