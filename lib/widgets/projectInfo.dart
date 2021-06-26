@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/payment_screen.dart';
 import 'package:viisoft/screens/wallet_screen.dart';
 
-class ProjectInfo extends StatelessWidget {
+class ProjectInfo extends StatefulWidget {
   String devId,
       projName,
       price,
@@ -16,6 +19,30 @@ class ProjectInfo extends StatelessWidget {
 
   ProjectInfo(this.devId, this.projName, this.price, this.deveName,
       this.imagPath, this.deveImg, this.desc, this.date, this.toolUsed);
+
+  @override
+  _ProjectInfoState createState() => _ProjectInfoState();
+}
+
+class _ProjectInfoState extends State<ProjectInfo> {
+  bool isBuyed = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((value) {
+      List list = value.data()['bp'];
+      if (list.contains(widget.projName)) {
+        setState(() {
+          isBuyed = true;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +84,7 @@ class ProjectInfo extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        desc,
+                        widget.desc,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey.shade600,
@@ -72,7 +99,7 @@ class ProjectInfo extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Project created in $date",
+                        "Project created in ${widget.date}",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey.shade600,
@@ -106,14 +133,14 @@ class ProjectInfo extends StatelessWidget {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: NetworkImage(deveImg),
+                                image: NetworkImage(widget.deveImg),
                                 fit: BoxFit.cover)),
                       ),
                       SizedBox(
                         width: 8,
                       ),
                       Text(
-                        deveName,
+                        widget.deveName,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey.shade600,
@@ -164,7 +191,7 @@ class ProjectInfo extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          toolUsed,
+                          widget.toolUsed,
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
@@ -187,7 +214,7 @@ class ProjectInfo extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        price,
+                        widget.price,
                         style: TextStyle(
                             color: Colors.grey.shade600, fontSize: 18),
                       )
@@ -196,44 +223,46 @@ class ProjectInfo extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  RaisedButton(
-                    disabledColor: Colors.red,
-                    onPressed: () {
-                      // print(deveName);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        // return PaymentScreen(
-                        // devId: devId,
-                        // projName: projName,
-                        // price: price,
-                        // deveName: deveName,
-                        // desc: desc,
-                        // projImg: imagPath,
-                        // );
-                        print(devId);
-                        return WalletScreen(
-                          isBuy: true,
-                          devId: devId,
-                          projName: projName,
-                          price: price,
-                          devName: deveName,
-                          desc: desc,
-                          projImg: imagPath,
-                        );
-                      }));
-                    },
-                    color: Theme.of(context).primaryColor,
-                    child: Text(
-                      "Buy Now !",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
+                  !isBuyed
+                      ? RaisedButton(
+                          disabledColor: Colors.red,
+                          onPressed: () {
+                            // print(deveName);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              // return PaymentScreen(
+                              // devId: devId,
+                              // projName: projName,
+                              // price: price,
+                              // deveName: deveName,
+                              // desc: desc,
+                              // projImg: imagPath,
+                              // );
+                              print(widget.devId);
+                              return WalletScreen(
+                                isBuy: true,
+                                devId: widget.devId,
+                                projName: widget.projName,
+                                price: widget.price,
+                                devName: widget.deveName,
+                                desc: widget.desc,
+                                projImg: widget.imagPath,
+                              );
+                            }));
+                          },
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            "Buy Now !",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        )
+                      : SizedBox(),
                 ],
               ),
             ),

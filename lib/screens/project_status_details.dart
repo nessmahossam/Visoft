@@ -6,6 +6,7 @@ import 'package:viisoft/widgets/custom_card.dart';
 class ProjectStatusDetails extends StatefulWidget {
   static String namedRoute = '/projectStatusDetails';
   static String docId;
+  static String collectionID;
 
   @override
   _ProjectStatusDetailsState createState() => _ProjectStatusDetailsState();
@@ -48,7 +49,7 @@ class _ProjectStatusDetailsState extends State<ProjectStatusDetails> {
             stream: FirebaseFirestore.instance
                 .collection("Users")
                 .doc(FirebaseAuth.instance.currentUser.uid)
-                .collection("OngoingProjects")
+                .collection(ProjectStatusDetails.collectionID)
                 .doc(ProjectStatusDetails.docId)
                 .collection("MileStones")
                 .snapshots(),
@@ -69,7 +70,7 @@ class _ProjectStatusDetailsState extends State<ProjectStatusDetails> {
                   itemBuilder: (context, index) {
                     return CustomCard(
                       mileStoneName: snapshot.data.docs[index].data()['title'],
-                      deadline: '21/2/2021',
+                      deadline: snapshot.data.docs[index].data()['deadLine'],
                       price: snapshot.data.docs[index].data()['price'],
                       description: snapshot.data.docs[index].data()['desc'],
                     );

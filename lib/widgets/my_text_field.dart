@@ -62,3 +62,68 @@ class MyTextField extends StatelessWidget {
     );
   }
 }
+
+class MyTextField2 extends StatelessWidget {
+  TextEditingController textEditingController;
+  TextInputType textInputType;
+  bool obscureText = false;
+  Function validate;
+  Function onChanged;
+  IconButton suffixIcon;
+  Function onSaved;
+  String labelText;
+  bool desc;
+
+  MyTextField2(
+      {this.textEditingController,
+      this.textInputType,
+      this.obscureText,
+      this.validate,
+      this.onChanged,
+      this.onSaved,
+      this.suffixIcon,
+      this.labelText,
+      this.desc});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          // border:
+          //     Border.all(color: Theme.of(context).primaryColor, width: 1),
+        ),
+        child: Center(
+            child: TextFormField(
+          onChanged: onChanged,
+          maxLines: desc ? null : 1,
+          onSaved: onSaved,
+          controller: textEditingController,
+          keyboardType: desc ? TextInputType.multiline : textInputType,
+          obscureText: obscureText,
+          style: TextStyle(color: Colors.black, fontSize: 15),
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              labelText: labelText,
+              labelStyle: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 15),
+              fillColor: Colors.white,
+              hoverColor: Theme.of(context).primaryColor,
+              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              suffixIcon: suffixIcon),
+          validator: validate,
+        )),
+      ),
+    );
+  }
+}
