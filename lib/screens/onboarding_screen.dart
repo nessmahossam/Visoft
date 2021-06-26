@@ -37,7 +37,8 @@ class OnboardingScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, WelcomeScreen.namedRoute);
+                        Navigator.pushReplacementNamed(
+                            context, WelcomeScreen.namedRoute);
                       },
                     ),
                   ],

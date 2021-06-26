@@ -93,10 +93,6 @@ class _AddProjectState extends State<AddProject> {
       reference.getDownloadURL().then((fileURL) {
         setState(() {
           _mainImguploadedFileURL = fileURL;
-<<<<<<< HEAD
-          print('img url: $fileURL');
-=======
->>>>>>> master
         });
       });
     } on FirebaseException catch (e) {
