@@ -155,7 +155,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                                 "devID": widget.devId,
                                                 'price': widget.price,
                                                 'desc': widget.desc,
-                                                'projImg': widget.projImg
+                                                'projImg': widget.projImg,
+                                                "counter": 0
                                               });
 
                                               //To save at developer's collections
@@ -172,7 +173,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                                 "devID": widget.devId,
                                                 'price': widget.price,
                                                 'desc': widget.desc,
-                                                'projImg': widget.projImg
+                                                'projImg': widget.projImg,
+                                                "counter": 0
                                               });
                                               //chatSection
                                               var chatRoomId =
@@ -202,6 +204,10 @@ class _WalletScreenState extends State<WalletScreen> {
                                                     currentUser.data()['Name'],
                                                 "isMileStone": true,
                                                 "ts": lastMessageTs,
+                                                "title": "Purchase MileStone",
+                                                "price": widget.price,
+                                                "desc": message,
+                                                "deadLine": " "
                                               };
 
                                               DatabaseMethod()
@@ -242,6 +248,13 @@ class _WalletScreenState extends State<WalletScreen> {
                                       true,
                                       true,
                                       context);
+                                  FirebaseFirestore.instance
+                                      .collection("Users")
+                                      .doc(
+                                          FirebaseAuth.instance.currentUser.uid)
+                                      .update({
+                                    "bp": [widget.projName]
+                                  });
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(right: 10),
@@ -388,7 +401,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                         padding:
                                             const EdgeInsets.only(left: 18),
                                         child: Text(
-                                          "\$ ${currentUser.data()['cash']}",
+                                          "\$ ${currentUser.data()['cash'].toString()}",
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w400,
@@ -431,7 +444,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                         padding:
                                             const EdgeInsets.only(left: 18),
                                         child: Text(
-                                          "\$ ${currentUser.data()['creditDebt']}",
+                                          "\$ ${currentUser.data()['creditDebt'].toString()}",
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w400,

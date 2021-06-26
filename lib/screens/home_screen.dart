@@ -137,9 +137,12 @@ class _HomeState extends State<Home> {
                               date: formatTimestamp(
                                   snapshot.data.docs[index].data()['date']),
                               desc: snapshot.data.docs[index].data()['desc'],
-                              dislike:
-                                  snapshot.data.docs[index].data()['dislikes'].toString(),
-                              like: snapshot.data.docs[index].data()['likes'].toString(),
+                              dislike: snapshot.data.docs[index]
+                                  .data()['dislikes']
+                                  .toString(),
+                              like: snapshot.data.docs[index]
+                                  .data()['likes']
+                                  .toString(),
                               listOfImages: snapshot.data.docs[index]
                                   .data()['listOfImages'],
                               toolused:

@@ -50,6 +50,7 @@ class _ProjectStatusState extends State<ProjectStatus> {
                         onTap: () {
                           ProjectStatusDetails.docId =
                               snapshot.data.docs[index].id;
+                          ProjectStatusDetails.collectionID = "OngoingProjects";
                           Navigator.of(context)
                               .pushNamed(ProjectStatusDetails.namedRoute);
                         },
@@ -154,6 +155,9 @@ class _ProjectStatusState extends State<ProjectStatus> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4.0),
                         onTap: () {
+                          ProjectStatusDetails.docId =
+                              snapshot.data.docs[index].id;
+                          ProjectStatusDetails.collectionID = "DoneProjects";
                           Navigator.of(context)
                               .pushNamed(ProjectStatusDetails.namedRoute);
                         },
