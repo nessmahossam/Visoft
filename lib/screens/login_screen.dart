@@ -9,19 +9,21 @@ import 'package:viisoft/screens/reset_password.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   static String namedRoute = '/loginScreen';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-
+var globalKey = GlobalKey<FormState>();
 class _LoginScreenState extends State<LoginScreen> {
   var globalKey = GlobalKey<FormState>();
 
   bool isHiddenPassword = true;
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Text('Login'),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+                SizedBox(
+                        height: size.height * 0.09,
+                      ),
               Image.asset(
                 'assets/images/authentication.png',
                 fit: BoxFit.contain,
