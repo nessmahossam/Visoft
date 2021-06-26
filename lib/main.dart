@@ -2,6 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
@@ -44,6 +45,13 @@ class MyApp extends StatelessWidget {
 
         // bottomAppBarColor: Colors.red,
         textTheme: TextTheme(
+          caption: GoogleFonts.lato(
+            textStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+                        fontSize: 34,
+                        color: Color(0xff15243b),
+            )
+          ),
           headline1: TextStyle(
               fontSize: 40.0, fontWeight: FontWeight.bold, color: Colors.white),
           headline5: TextStyle(

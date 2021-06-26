@@ -37,8 +37,8 @@ class _AddProjectState extends State<AddProject> {
   String developerImg =
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbuId9bul-yvxvtcPN6rxcx28ZMyjGvSIFtQ&usqp=CAU";
   String developerName = "Sandra";
-  String likes = "5";
-  String dislikes = "30";
+  int likes = 0;
+  int dislikes = 0;
 
   List<File> imageUrls = [];
   // List<String> uploadedImg = [];

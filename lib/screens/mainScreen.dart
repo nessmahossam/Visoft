@@ -31,25 +31,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // retriveInfo();
-    // setState(() {
-    //   FirebaseFirestore.instance
-    //       .collection("Users")
-    //       .doc(FirebaseAuth.instance.currentUser.uid)
-    //       .get()
-    //       .then((value) {
-    //     print(value.data());
-    //     if (value.data()['TypeCustomer'] == true) {
-    //       setState(() {
-    //         MainScreen.isCustomer = true;
-    //       });
-    //     } else {
-    //       setState(() {
-    //         MainScreen.isCustomer = false;
-    //       });
-    //     }
-    //   });
-    // });
   }
 
   @override
