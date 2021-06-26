@@ -106,7 +106,8 @@ class _HomeState extends State<Home> {
             ),
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection("AllProjects").orderBy("likes", descending: false)
+                  .collection("AllProjects")
+                  .orderBy("likes", descending: false)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -137,18 +138,12 @@ class _HomeState extends State<Home> {
                               date: formatTimestamp(
                                   snapshot.data.docs[index].data()['date']),
                               desc: snapshot.data.docs[index].data()['desc'],
-<<<<<<< HEAD
                               dislike: snapshot.data.docs[index]
                                   .data()['dislikes']
                                   .toString(),
                               like: snapshot.data.docs[index]
                                   .data()['likes']
                                   .toString(),
-=======
-                              dislike:
-                                  snapshot.data.docs[index].data()['dislikes'].toString(),
-                              like: snapshot.data.docs[index].data()['likes'].toString(),
->>>>>>> origin/Nessma
                               listOfImages: snapshot.data.docs[index]
                                   .data()['listOfImages'],
                               toolused:

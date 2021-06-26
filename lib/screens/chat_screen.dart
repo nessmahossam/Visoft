@@ -114,6 +114,23 @@ class _ChatScreenState extends State<ChatScreen> {
         .collection("Users")
         .doc(widget.userID)
         .update({"cash": FieldValue.increment(price)});
+    FirebaseFirestore.instance
+        .collection("AllProjects")
+        .doc(widget.projName)
+        .get()
+        .then((value) {
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(widget.userID)
+          .collection("Transactions")
+          .doc()
+          .set({
+        "title": widget.projName,
+        "img": value.data()['mainImg'],
+        "price": price,
+        "time": DateTime.now()
+      });
+    });
   }
 
   Widget chatMessageTile(String message, bool sendByMe) {
@@ -343,6 +360,23 @@ class _ChatScreenState extends State<ChatScreen> {
                                               .update({
                                             "creditDebt": FieldValue.increment(
                                                 -int.parse(price) * (10 / 100))
+                                          });
+                                          FirebaseFirestore.instance
+                                              .collection("AllProjects")
+                                              .doc(widget.projName)
+                                              .get()
+                                              .then((value) {
+                                            FirebaseFirestore.instance
+                                                .collection("Users")
+                                                .doc(widget.clientID)
+                                                .collection("Transactions")
+                                                .doc()
+                                                .set({
+                                              "title": widget.projName,
+                                              "img": value.data()['mainImg'],
+                                              "price": -int.parse(price),
+                                              "time": DateTime.now()
+                                            });
                                           });
                                         },
                                         child: Text(

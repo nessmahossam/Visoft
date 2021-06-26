@@ -36,7 +36,7 @@ class _AddProjectState extends State<AddProject> {
 
   String developerImg =
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbuId9bul-yvxvtcPN6rxcx28ZMyjGvSIFtQ&usqp=CAU";
-  String developerName = "Sandra";
+  String developerName;
   int likes = 0;
   int dislikes = 0;
 
@@ -559,7 +559,7 @@ class _AddProjectState extends State<AddProject> {
                           "listOfImages": _ssImguploadedFileURL,
                           "date": Timestamp.now(),
                           "developerImg": developerImg,
-                          "developerName": developerName,
+                          "developerName": currentUser.data()['Name'],
                           "likes": likes,
                           "dislikes": dislikes,
                         });
