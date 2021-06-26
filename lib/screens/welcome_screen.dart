@@ -20,20 +20,18 @@ class WelcomeScreen extends StatelessWidget {
             children: <Widget>[
               RichText(
                   text: TextSpan(
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'LibreBodoni',
-                        fontSize: 30,
-                        color: Color(0xff15243b),
-                      ),
+                    style: Theme.of(context).textTheme.caption,
                       children: [
                     TextSpan(text: 'Welcome to '),
                     TextSpan(
                         text: 'Visoft',
-                        style: TextStyle(
+                        style:
+                          TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontSize: 33,
-                        ))
+                          fontSize: 37,
+                        ),
+                        ),
+              
                   ])),
               SizedBox(
                 height: size.height * 0.03,
