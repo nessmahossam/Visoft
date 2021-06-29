@@ -49,15 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 'assets/images/authentication.png',
                 fit: BoxFit.contain,
               ),
-              Text(
-                'Sign In',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'LibreBodoni',
-                  fontSize: 30,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
+              
               Form(
                 key: globalKey,
                 child: SingleChildScrollView(

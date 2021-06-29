@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
@@ -218,9 +219,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   size: size,
                   // this is the size of Media Query .. Media Query used to make the app responsive to all other devices
                   title: 'Register',
-                  onPress: () async {
+                  onPress: () async { 
                     try {
-                      await _auth
+                     await _auth
                           .createUserWithEmailAndPassword(
                               email: _emailController.text,
                               password: _passwordController.text)
@@ -244,7 +245,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'bp': [],
                                 },
                               ))
-                          .then((value) {
+                          .then((value) async{
+                            SharedPreferences prefs=await SharedPreferences.getInstance();
+                            prefs.setString('Mail', _emailController.text);
                         Navigator.pushNamed(context, Home.namedRoute);
                       });
                     } on FirebaseAuthException catch (e) {

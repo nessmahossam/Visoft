@@ -559,7 +559,7 @@ class _AddProjectState extends State<AddProject> {
                           "listOfImages": _ssImguploadedFileURL,
                           "date": Timestamp.now(),
                           "developerImg": developerImg,
-                          "developerName":  FirebaseAuth.instance.currentUser.displayName,
+                          "developerName": currentUser.data()['Name'],
                           "likes": likes,
                           "dislikes": dislikes,
                         });
