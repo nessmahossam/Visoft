@@ -12,6 +12,7 @@ import 'package:viisoft/screens/project_status.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/screens/wallet_screen.dart';
+import 'package:viisoft/screens/welcome_screen.dart';
 
 import 'home_screen.dart';
 
@@ -266,6 +267,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 Future<void> _signOut(BuildContext context) async {
-  await FirebaseAuth.instance.signOut();
-  Navigator.of(context).pushReplacementNamed(LoginScreen.namedRoute);
+  await FirebaseAuth.instance.signOut().then((value) {
+    Navigator.of(context).pushReplacementNamed(WelcomeScreen.namedRoute);
+  });
 }
