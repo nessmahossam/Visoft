@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:viisoft/screens/register_screen.dart';
 import 'package:viisoft/widgets/my_button.dart';
 
@@ -23,17 +22,17 @@ class WelcomeScreen extends StatelessWidget {
                   text: TextSpan(
                     style: Theme.of(context).textTheme.caption,
                       children: [
-                    TextSpan(text: 'Welcome to '),
+                    TextSpan(text: 'Welcome to ' , style: TextStyle(fontSize: 34,fontWeight: FontWeight.bold)),
                     TextSpan(
                         text: 'Visoft',
-                        style: GoogleFonts.lobster(
-                          textStyle:
+                        style:
                           TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 37,
+                          fontWeight:FontWeight.bold
                         ),
                         ),
-                        ) 
+              
                   ])),
               SizedBox(
                 height: size.height * 0.03,

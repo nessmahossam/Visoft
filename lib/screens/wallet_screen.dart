@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
@@ -554,14 +553,13 @@ class _WalletScreenState extends State<WalletScreen> {
                                                           snapshot
                                                               .data.docs[index]
                                                               .data()['title'],
-                                                          style:
-                                                              GoogleFonts.inter(
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color: Colors
-                                                                      .black),
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                         SizedBox(
                                                           height: 5,
@@ -575,14 +573,13 @@ class _WalletScreenState extends State<WalletScreen> {
                                                                   .data()[
                                                                       'time']
                                                                   .toDate()),
-                                                          style:
-                                                              GoogleFonts.inter(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Colors
-                                                                      .grey),
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.grey),
                                                         ),
                                                       ],
                                                     )
@@ -592,7 +589,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                                   children: [
                                                     Text(
                                                       '${snapshot.data.docs[index].data()['price']} EGP',
-                                                      style: GoogleFonts.inter(
+                                                      style: TextStyle(
                                                           fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.w700,

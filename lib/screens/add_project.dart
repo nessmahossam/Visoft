@@ -127,6 +127,7 @@ class _AddProjectState extends State<AddProject> {
     // TODO: implement initState
     super.initState();
     _mainImage = null;
+    _ssImguploadedFileURL.clear();
   }
 
   void clearTextFields() {
@@ -308,7 +309,7 @@ class _AddProjectState extends State<AddProject> {
                                 // itemHeight: 60,
                                 iconSize: 20,
                                 hint: Text(
-                                  "Choose Category",
+                                  "Ckhoose Category",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -538,7 +539,8 @@ class _AddProjectState extends State<AddProject> {
                         "listOfImages": _ssImguploadedFileURL,
                         "date": Timestamp.now(),
                         "developerImg": developerImg,
-                        "developerName": developerName,
+                        "developerName":
+                            FirebaseAuth.instance.currentUser.displayName,
                         "likes": likes,
                         "dislikes": dislikes,
                       }).then((value) async {
