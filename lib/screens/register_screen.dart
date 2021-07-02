@@ -34,6 +34,7 @@ TextEditingController _nationalIDController = TextEditingController();
 String _dobController;
 String _genderController;
 bool isCustomer = true;
+bool isAsset = true;
 List<String> projectsList = [];
 
 final _auth = FirebaseAuth.instance;
@@ -242,6 +243,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'cash': 0,
                                   'creditDebt': 0,
                                   'bp': [],
+                                  'assetImage': isAsset,
+                                  'userImg': 'assets/images/profile.png',
                                 },
                               ))
                           .then((value) {
@@ -461,6 +464,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'DevelopedProjects': projectsList,
                                 'cash': '0',
                                 'creditDebt': '0',
+                                'assetImage': isAsset,
+                                'userImg': 'assets/images/profile.png',
                               },
                             ))
                         .then((value) {
