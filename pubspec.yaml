@@ -37,7 +37,6 @@ dependencies:
   flutter_vector_icons: ^1.0.0
   rating_bar: ^0.2.0
   intl: ^0.17.0
-  # google_fonts: ^2.0.0
 
 
 
@@ -62,7 +61,7 @@ flutter_icons:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
-flutter:
+flutter :
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

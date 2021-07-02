@@ -62,6 +62,7 @@ class _HomeState extends State<Home> {
                   return ListView.builder(
                     itemCount: snapshot.data.docs.length,
                     scrollDirection: Axis.horizontal,
+                    physics: ClampingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return GestureDetector(
@@ -80,10 +81,17 @@ class _HomeState extends State<Home> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    FontAwesomeIcons.accusoft,
-                                    color: Colors.blueGrey,
-                                    size: 20,
+                                  Container(
+                                    height: 30,
+                                    width: 30,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: AssetImage(snapshot
+                                              .data.docs[index]
+                                              .data()['icon']),
+                                          fit: BoxFit.cover),
+                                    ),
                                   ),
                                   SizedBox(height: 14),
                                   Text(

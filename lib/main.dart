@@ -1,8 +1,10 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viisoft/screens/edit_profile.dart';
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
@@ -17,6 +19,7 @@ import 'package:viisoft/screens/wallet_screen.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
 import 'package:viisoft/screens/edit_profile.dart';
 
+import 'constants.dart';
 import 'screens/register_screen.dart';
 
 void main() async {
@@ -25,7 +28,24 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (FirebaseAuth.instance.currentUser != null) {
+      retriveInfo(context);
+      retrivePaymentInfo(context);
+    } else {
+      print('asd');
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,12 +57,12 @@ class MyApp extends StatelessWidget {
         accentColor: Color(0xff84b4c1),
         primaryColor: Color(0xff2f9f9f),
         tabBarTheme: TabBarTheme(
-          labelColor: Colors.white,
+          labelColor: Color(0xff84b4c1),
         ),
         iconTheme: IconThemeData(color: Color(0xff2f9f9f)),
         appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Color(0xff2f9f9f)),
+            iconTheme: IconThemeData(color: Color(0xff2f9f9f)),
+            backgroundColor: Color(0xfffcfcfe)),
 
         // bottomAppBarColor: Colors.red,
         textTheme: TextTheme(
@@ -66,7 +86,9 @@ class MyApp extends StatelessWidget {
       home: AnimatedSplashScreen(
         duration: 1500,
         splash: 'assets/images/LogoFinal.png',
-        nextScreen: OnboardingScreen(),
+        nextScreen: FirebaseAuth.instance.currentUser == null
+            ? OnboardingScreen()
+            : MainScreen(),
         splashTransition: SplashTransition.rotationTransition,
         pageTransitionType: PageTransitionType.rightToLeftWithFade,
         backgroundColor: Color(0xfffcfcfe),
