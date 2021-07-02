@@ -112,7 +112,12 @@ class _HomeState extends State<Home> {
             ),
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
+<<<<<<< HEAD
                   .collection("AllProjects").orderBy("likes", descending: true)
+=======
+                  .collection("AllProjects")
+                  .orderBy("likes", descending: true)
+>>>>>>> Sandra
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {

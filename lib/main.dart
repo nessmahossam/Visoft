@@ -4,7 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
+=======
+import 'package:viisoft/screens/edit_profile.dart';
+>>>>>>> Sandra
 import 'package:viisoft/screens/home_screen.dart';
 import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/screens/mainScreen.dart';
@@ -16,6 +20,7 @@ import 'package:viisoft/screens/project_status_details.dart';
 import 'package:viisoft/screens/wallet_detials_screen.dart';
 import 'package:viisoft/screens/wallet_screen.dart';
 import 'package:viisoft/screens/welcome_screen.dart';
+import 'package:viisoft/screens/edit_profile.dart';
 
 import 'constants.dart';
 import 'screens/register_screen.dart';
@@ -104,6 +109,7 @@ class _MyAppState extends State<MyApp> {
         ProjectStatus.namedRoute: (ctx) => ProjectStatus(),
         WalletScreen.namedRoute: (ctx) => WalletScreen(),
         WalletDetails.namedRoute: (ctx) => WalletDetails(),
+        EditProfile.namedRoute: (ctx) => EditProfile(),
         // ChatScreen.namedRoute: (ctx) => ChatScreen(),
       },
     );
