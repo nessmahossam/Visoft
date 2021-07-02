@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viisoft/screens/projectDetails.dart';
@@ -13,6 +15,7 @@ class projectCard extends StatelessWidget {
       date,
       like,
       dislike,
+      category,
       toolused;
   final List<dynamic> listOfImages;
   projectCard(
@@ -20,6 +23,7 @@ class projectCard extends StatelessWidget {
       @required this.img,
       @required this.title,
       @required this.price,
+      this.category,
       @required this.deveName,
       @required this.deveImg,
       this.desc,
@@ -33,6 +37,12 @@ class projectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        FirebaseFirestore.instance
+            .collection("Users")
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .update({
+          "recommended": FieldValue.arrayUnion([category])
+        });
         Navigator.push(
           context,
           MaterialPageRoute(

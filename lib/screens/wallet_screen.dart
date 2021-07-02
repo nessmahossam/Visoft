@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/models/firebase_fn.dart';
@@ -465,6 +466,145 @@ class _WalletScreenState extends State<WalletScreen> {
                                   fontSize: 22,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black54),
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            Container(
+                              height: 199,
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection("Users")
+                                    .doc(currentUser.id)
+                                    .collection("Transactions")
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Something went wrong');
+                                  }
+
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  }
+
+                                  return ListView.builder(
+                                      itemCount: snapshot.data.docs.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Container(
+                                            height: 100,
+                                            margin: EdgeInsets.only(bottom: 5),
+                                            padding: EdgeInsets.only(
+                                                left: 24,
+                                                top: 12,
+                                                bottom: 12,
+                                                right: 24),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey[300],
+                                                      blurRadius: 1,
+                                                      spreadRadius: 1,
+                                                      offset: Offset(2, 2))
+                                                ]),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 100,
+                                                      width: 100,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          image: DecorationImage(
+                                                              fit: BoxFit.cover,
+                                                              image: NetworkImage(
+                                                                  snapshot
+                                                                          .data
+                                                                          .docs[
+                                                                              index]
+                                                                          .data()[
+                                                                      'img']))),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 13,
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          snapshot
+                                                              .data.docs[index]
+                                                              .data()['title'],
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                          DateFormat(
+                                                                  "dd/MM/yyyy")
+                                                              .format(snapshot
+                                                                  .data
+                                                                  .docs[index]
+                                                                  .data()[
+                                                                      'time']
+                                                                  .toDate()),
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      '${snapshot.data.docs[index].data()['price']} EGP',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: Colors
+                                                              .blueAccent),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                },
+                              ),
                             ),
                           ],
                         ),

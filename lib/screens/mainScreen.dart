@@ -12,6 +12,7 @@ import 'package:viisoft/screens/project_status.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:viisoft/screens/login_screen.dart';
 import 'package:viisoft/screens/wallet_screen.dart';
+import 'package:viisoft/screens/welcome_screen.dart';
 
 import 'home_screen.dart';
 
@@ -162,12 +163,24 @@ class _MainScreenState extends State<MainScreen> {
                     resizeToAvoidBottomInset: true,
                     body: PageView(
                       controller: _pageController,
-                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {
                         setState(() => currentIndex = index);
                       },
                       children: <Widget>[
-                        Home(),
+                        Home(
+                          function: () {
+                            if (value == 0) {
+                              setState(() {
+                                value = 1;
+                              });
+                            } else {
+                              setState(() {
+                                value = 0;
+                              });
+                            }
+                          },
+                        ),
                         InboxScreen(),
                         if (!MainScreen.isCustomer) AddProject(),
                         ProjectStatus(),
@@ -178,19 +191,19 @@ class _MainScreenState extends State<MainScreen> {
                 ));
               },
             ),
-            GestureDetector(
-              onHorizontalDragUpdate: (e) {
-                if (e.delta.dx > 0) {
-                  setState(() {
-                    value = 1;
-                  });
-                } else {
-                  setState(() {
-                    value = 0;
-                  });
-                }
-              },
-            )
+            // GestureDetector(
+            //   onHorizontalDragUpdate: (e) {
+            //     if (e.delta.dx > 0) {
+            //       setState(() {
+            //         value = 1;
+            //       });
+            //     } else {
+            //       setState(() {
+            //         value = 0;
+            //       });
+            //     }
+            //   },
+            // )
           ],
         ),
         bottomNavigationBar: BottomNavyBar(
@@ -254,6 +267,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 Future<void> _signOut(BuildContext context) async {
-  await FirebaseAuth.instance.signOut();
-  Navigator.of(context).pushReplacementNamed(LoginScreen.namedRoute);
+  await FirebaseAuth.instance.signOut().then((value) {
+    Navigator.of(context).pushReplacementNamed(WelcomeScreen.namedRoute);
+  });
 }
