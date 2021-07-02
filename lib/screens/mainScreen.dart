@@ -162,12 +162,24 @@ class _MainScreenState extends State<MainScreen> {
                     resizeToAvoidBottomInset: true,
                     body: PageView(
                       controller: _pageController,
-                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {
                         setState(() => currentIndex = index);
                       },
                       children: <Widget>[
-                        Home(),
+                        Home(
+                          function: () {
+                            if (value == 0) {
+                              setState(() {
+                                value = 1;
+                              });
+                            } else {
+                              setState(() {
+                                value = 0;
+                              });
+                            }
+                          },
+                        ),
                         InboxScreen(),
                         if (!MainScreen.isCustomer) AddProject(),
                         ProjectStatus(),
@@ -178,19 +190,19 @@ class _MainScreenState extends State<MainScreen> {
                 ));
               },
             ),
-            GestureDetector(
-              onHorizontalDragUpdate: (e) {
-                if (e.delta.dx > 0) {
-                  setState(() {
-                    value = 1;
-                  });
-                } else {
-                  setState(() {
-                    value = 0;
-                  });
-                }
-              },
-            )
+            // GestureDetector(
+            //   onHorizontalDragUpdate: (e) {
+            //     if (e.delta.dx > 0) {
+            //       setState(() {
+            //         value = 1;
+            //       });
+            //     } else {
+            //       setState(() {
+            //         value = 0;
+            //       });
+            //     }
+            //   },
+            // )
           ],
         ),
         bottomNavigationBar: BottomNavyBar(

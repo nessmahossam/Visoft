@@ -70,7 +70,7 @@ class _ProjectStatusState extends State<ProjectStatus> {
                                         bottomLeft: Radius.circular(4.0),
                                       ),
                                 image: DecorationImage(
-                                    image: AssetImage(
+                                    image: NetworkImage(
                                       '${bodyData[index].data()["projImg"]}',
                                     ),
                                     fit: BoxFit.cover),
@@ -177,7 +177,7 @@ class _ProjectStatusState extends State<ProjectStatus> {
                                         bottomLeft: Radius.circular(4.0),
                                       ),
                                 image: DecorationImage(
-                                    image: AssetImage(
+                                    image: NetworkImage(
                                       '${bodyData[index].data()["projImg"]}',
                                     ),
                                     fit: BoxFit.cover),

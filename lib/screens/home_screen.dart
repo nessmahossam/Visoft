@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:viisoft/constants.dart';
@@ -10,6 +11,9 @@ import 'package:intl/intl.dart';
 class Home extends StatefulWidget {
   static String namedRoute = '/homePage';
   static String category = "All";
+  final Function function;
+
+  const Home({Key key, this.function}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -17,12 +21,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = new List<CategoryModel>();
+  bool isRecommended = false;
 
   String formatTimestamp(Timestamp date) {
     var format = new DateFormat('y-MM-d'); // 'hh:mm' for hour & min
     return format.format(date.toDate());
   }
 
+  List listOfRecommended = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -43,11 +49,27 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(11.0),
+              child: InkWell(
+                onTap: widget.function,
+                child: Row(
+                  children: [
+                    Icon(Icons.menu),
+                    Text(
+                      'Open Drawer',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+              ),
+            ),
             Container(
               height: 100,
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("Categories")
+                    .orderBy("ar")
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -67,8 +89,15 @@ class _HomeState extends State<Home> {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            Home.category =
-                                snapshot.data.docs[index].data()['name'];
+                            if (snapshot.data.docs[index]['name'] ==
+                                "Recommended") {
+                              Home.category = "All";
+                              isRecommended = true;
+                            } else {
+                              Home.category =
+                                  snapshot.data.docs[index].data()['name'];
+                              isRecommended = false;
+                            }
                             print(Home.category);
                           });
                         },
@@ -105,10 +134,14 @@ class _HomeState extends State<Home> {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("AllProjects")
-                  .orderBy("likes", descending: false)
-                  .snapshots(),
+              stream: isRecommended
+                  ? FirebaseFirestore.instance
+                      .collection("AllProjects")
+                      .where("category", whereIn: listOfRecommended)
+                      .snapshots()
+                  : FirebaseFirestore.instance
+                      .collection("AllProjects")
+                      .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
@@ -129,6 +162,8 @@ class _HomeState extends State<Home> {
                               userId:
                                   snapshot.data.docs[index].data()['userID'],
                               img: snapshot.data.docs[index].data()['mainImg'],
+                              category:
+                                  snapshot.data.docs[index].data()['category'],
                               deveImg: snapshot.data.docs[index]
                                   .data()['developerImg'],
                               deveName: snapshot.data.docs[index]
@@ -156,6 +191,23 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(FirebaseAuth.instance.currentUser.uid)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox();
+                  }
+                  listOfRecommended = snapshot.data.data()['recommended'];
+                  return SizedBox();
+                })
           ],
         ),
       ),
