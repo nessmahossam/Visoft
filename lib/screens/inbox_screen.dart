@@ -154,9 +154,9 @@ class _InboxScreenState extends State<InboxScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
+        /*appBar: AppBar(
           title: Text('Inbox'),
-          actions: [
+          /*actions: [
             InkWell(
               onTap: () {
                 DatabaseMethod().signOut().then((s) {
@@ -166,16 +166,27 @@ class _InboxScreenState extends State<InboxScreen> {
               },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Icon(Icons.logout)),
-            )
-          ],
-          centerTitle: true,
-        ),
+                  //child: Icon(Icons.logout)),
+            )*/
+          ],*/
+          //centerTitle: true,
+        //),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                   SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              iconSize: 33,
+                              color: Theme.of(context).primaryColor,
+                              onPressed:() =>Navigator.of(context).pop()),
+                    ),
                   Row(children: [
                     isSearching
                         ? GestureDetector(
