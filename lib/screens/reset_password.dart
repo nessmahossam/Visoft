@@ -26,10 +26,48 @@ class _ResetScreenState extends State<ResetScreen> {
           child: Container(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: <Widget>[
                     SizedBox(
-                      height: size.height * 0.2,
+                        height: size.height * 0.03,
+                      ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              iconSize: 33,
+                              color: Theme.of(context).primaryColor,
+                              onPressed:() =>Navigator.of(context).pop()),
+                    ),
+                     SizedBox(
+                        height: size.height * 0.03,
+                      ),
+                      Text('FORGOT PASSWORD!' , style: TextStyle(
+            
+                        decoration: TextDecoration.combine([
+                         // TextDecoration.underline,
+                        //TextDecoration.overline
+                        ]
+                        ),
+                        decorationThickness: 2.0,
+                        letterSpacing: 2.6,
+                        wordSpacing: 3.0,
+                        shadows: [
+                          Shadow(
+                            color: Theme.of(context).primaryColor,
+                            blurRadius: 3.53,
+                            offset: Offset(1,2)
+                          )
+                        ],
+          color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold,fontSize: 25),),
+           SizedBox(
+                        height: size.height * 0.02,
+                      ),
+              Image.asset(
+                'assets/images/secure.png',
+                fit: BoxFit.contain,
+              ),
+                    SizedBox(
+                      height: size.height * 0.03,
                     ),
                     MyTextField(
                       textEditingController: emailController,
@@ -44,7 +82,7 @@ class _ResetScreenState extends State<ResetScreen> {
                     ),
                     MyButton(
                         size: size,
-                        title: 'reset password',
+                        title: 'Send a Code',
                         onPress: () {
                           if (globalKey.currentState.validate()) {
                             try {
@@ -97,11 +135,21 @@ class _ResetScreenState extends State<ResetScreen> {
       resizeToAvoidBottomInset: false,
 
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Text('Reset Password'
+      /*appBar: AppBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        title: Text('Reset Password' , style: TextStyle(
+          color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold,fontSize: 25),
         ),
-        centerTitle: true,
-      ),
+      
+        automaticallyImplyLeading: false,
+        //enterTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Theme.of(context).primaryColor,
+          onPressed:() =>Navigator.of(context).pop(),
+        ),
+        
+      ),*/
       body: Form(
         key: globalKey,
         child:  Column(

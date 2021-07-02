@@ -15,6 +15,7 @@ import 'package:viisoft/widgets/reg_login_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
+  String selectedGender;
   static String namedRoute = '/registerScreen';
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -41,36 +42,23 @@ final _auth = FirebaseAuth.instance;
 List bp = [];
 
 List<String> genderList = [
-  ' ',
   'Male',
   'Female',
 ];
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  String selectedGender = genderList[0];
-
+  String selectedGender;
+  List<DropdownMenuItem> GenderList = [];
+  List<DropdownMenuItem<String>> dropDownItem = [];
   DropdownButton<String> genderDropDownButton() {
-    List<DropdownMenuItem<String>> dropDownItem = [];
     for (String gender in genderList) {
       var newItem = DropdownMenuItem(
         child: Text(gender),
         value: gender,
       );
-      dropDownItem.add(newItem);
+      GenderList.add(newItem);
+      print(GenderList);
     }
-
-    return DropdownButton<String>(
-      value: selectedGender,
-      items: dropDownItem,
-      onChanged: (value) {
-        setState(() {
-          print(value);
-          selectedGender = value;
-          _genderController = selectedGender;
-          print(selectedGender);
-        });
-      },
-    );
   }
 
   void clearForm() {
@@ -101,6 +89,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     final regExp = RegExp(pattern);
     return regExp.hasMatch(pass);
+  }
+
+  @override
+  void initState() {
+    genderDropDownButton();
+    // TODO: implement initState
+
+    super.initState();
   }
 
   @override
@@ -200,28 +196,58 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 12.0,
+                  height: 15.0,
                 ),
-                Text(
-                  'Select Gender ',
-                  style: TextStyle(
-                    color: Color(0xff2f9f9f),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
+                Container(
+                  width: 350,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 1,
+                      ),
+                      color: Theme.of(context).backgroundColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButton(
+                      
+                      dropdownColor: Theme.of(context).backgroundColor,
+                      icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
+                      items: GenderList,
+                      onChanged: (GenderValue) {
+                        final snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            content: Text('Selected Category is $GenderValue'));
+                        setState(() {
+                          selectedGender = GenderValue;
+                          print(selectedGender);
+                        });
+                      },
+                      value: selectedGender,
+                      isExpanded: false,
+                      // itemHeight: 60,
+                      iconSize: 20,
+                      hint: Text(
+                        "Select Gender",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      underline: SizedBox(),
+                    ),
                   ),
-                  textAlign: TextAlign.left,
                 ),
-                SizedBox(
-                  height: 12.0,
-                ),
-                genderDropDownButton(),
+               
                 MyButton(
                   size: size,
                   // this is the size of Media Query .. Media Query used to make the app responsive to all other devices
                   title: 'Register',
-                  onPress: () async { 
+                  onPress: () async {
                     try {
-                     await _auth
+                      await _auth
                           .createUserWithEmailAndPassword(
                               email: _emailController.text,
                               password: _passwordController.text)
@@ -245,9 +271,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'bp': [],
                                 },
                               ))
-                          .then((value) async{
-                            SharedPreferences prefs=await SharedPreferences.getInstance();
-                            prefs.setString('Mail', _emailController.text);
+                          .then((value) async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString('Mail', _emailController.text);
                         Navigator.pushNamed(context, Home.namedRoute);
                       });
                     } on FirebaseAuthException catch (e) {
@@ -425,19 +452,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 12.0,
                 ),
-                Text(
-                  'Select Gender ',
-                  style: TextStyle(
-                    color: Color(0xff2f9f9f),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
+                Container(
+                  width: 350,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 1,
+                      ),
+                      color: Theme.of(context).backgroundColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButton(
+                      
+                      dropdownColor: Theme.of(context).backgroundColor,
+                      icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
+                      items: GenderList,
+                      onChanged: (GenderValue) {
+                        final snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            content: Text('Selected Category is $GenderValue'));
+                        setState(() {
+                          selectedGender = GenderValue;
+                          print(selectedGender);
+                        });
+                      },
+                      value: selectedGender,
+                      isExpanded: false,
+                      // itemHeight: 60,
+                      iconSize: 20,
+                      hint: Text(
+                        "Select Gender",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      underline: SizedBox(),
+                    ),
                   ),
-                  textAlign: TextAlign.left,
                 ),
                 SizedBox(
                   height: 12.0,
                 ),
-                genderDropDownButton(),
                 MyButton(
                   size: size,
                   // this is the size of Media Query .. Media Query used to make the app responsive to all other devices

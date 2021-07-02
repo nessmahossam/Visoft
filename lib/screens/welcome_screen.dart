@@ -22,13 +22,14 @@ class WelcomeScreen extends StatelessWidget {
                   text: TextSpan(
                     style: Theme.of(context).textTheme.caption,
                       children: [
-                    TextSpan(text: 'Welcome to '),
+                    TextSpan(text: 'Welcome to ' , style: TextStyle(fontSize: 34,fontWeight: FontWeight.bold)),
                     TextSpan(
                         text: 'Visoft',
                         style:
                           TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 37,
+                          fontWeight:FontWeight.bold
                         ),
                         ),
               

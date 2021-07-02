@@ -308,7 +308,7 @@ class _AddProjectState extends State<AddProject> {
                                 // itemHeight: 60,
                                 iconSize: 20,
                                 hint: Text(
-                                  "Choose Category",
+                                  "Ckhoose Category",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
