@@ -171,6 +171,7 @@ class _InboxScreenState extends State<InboxScreen> {
           ],*/
         //centerTitle: true,
         //),
+<<<<<<< HEAD
         body: SafeArea(
       child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -211,6 +212,27 @@ class _InboxScreenState extends State<InboxScreen> {
                                     border: InputBorder.none,
                                     hintText: "Search with username "))),
                         GestureDetector(
+=======
+        body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        iconSize: 33,
+                        color: Theme.of(context).primaryColor,
+                        onPressed: () => Navigator.of(context).pop()),
+                  ),
+                  Row(children: [
+                    isSearching
+                        ? GestureDetector(
+>>>>>>> bassem
                             onTap: () {
                               if (searchController.text != "") {
                                 print(myName);
@@ -258,7 +280,6 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
     // mmm = querySnapshot.docs[0]["Name"];
     // email = querySnapshot.docs[0]["Mail"];
     //    id ="${querySnapshot.docs[0]["uid"]}";
-    setState(() {});
   }
 
   @override

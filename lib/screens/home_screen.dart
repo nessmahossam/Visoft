@@ -22,6 +22,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = new List<CategoryModel>();
   bool isRecommended = false;
+  bool isSearching = false;
+  TextEditingController searchingContoller = TextEditingController();
 
   String formatTimestamp(Timestamp date) {
     var format = new DateFormat('y-MM-d'); // 'hh:mm' for hour & min
@@ -41,29 +43,57 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
     print(statusList.length);
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Home'),
-      //   centerTitle: true,
-      // ),
+      appBar: AppBar(
+        // title: InkWell(onTap: widget.function, child: Icon(Icons.menu)),
+
+        title: !isSearching
+            ? InkWell(onTap: widget.function, child: Icon(Icons.menu))
+            : TextField(
+                controller: searchingContoller,
+                onSubmitted: (v) {
+                  setState(() {});
+                },
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+                decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Theme.of(context).primaryColor),
+                    icon: Icon(
+                      Icons.search,
+                    ),
+                    hintText: "Iam Searching For..."),
+              ),
+        // centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: !isSearching
+                ? InkWell(
+                    onTap: () {
+                      setState(() {
+                        isSearching = true;
+                      });
+                    },
+                    child: Icon(
+                      Icons.search,
+                      color: Theme.of(context).primaryColor,
+                    ))
+                : InkWell(
+                    onTap: () {
+                      setState(() {
+                        isSearching = false;
+                        searchingContoller.clear();
+                      });
+                    },
+                    child: Icon(Icons.cancel)),
+          )
+        ],
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(11.0),
-              child: InkWell(
-                onTap: widget.function,
-                child: Row(
-                  children: [
-                    Icon(Icons.menu),
-                    Text(
-                      'Open Drawer',
-                      style: TextStyle(color: Colors.black),
-                    )
-                  ],
-                ),
-              ),
-            ),
             Container(
               height: 100,
               child: StreamBuilder<QuerySnapshot>(
@@ -115,12 +145,12 @@ class _HomeState extends State<Home> {
                                     width: 30,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: AssetImage(snapshot
-                                              .data.docs[index]
-                                              .data()['icon']),
-                                          fit: BoxFit.cover),
                                     ),
+                                    child: Image(
+                                        image: AssetImage(snapshot
+                                            .data.docs[index]
+                                            .data()['icon']),
+                                        fit: BoxFit.cover),
                                   ),
                                   SizedBox(height: 14),
                                   Text(
@@ -160,40 +190,95 @@ class _HomeState extends State<Home> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 }
+                if (snapshot.data.docs.length == 0) {
+                  Container(
+                    child: Center(
+                      child: Icon(Icons.face),
+                    ),
+                  );
+                }
                 return Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) {
-                      return Home.category ==
+                      return !isSearching
+                          ? Home.category ==
+                                      snapshot.data.docs[index]
+                                          .data()['category'] ||
+                                  Home.category == "All"
+                              ? projectCard(
+                                  userId: snapshot.data.docs[index]
+                                      .data()['userID'],
+                                  img: snapshot.data.docs[index]
+                                      .data()['mainImg'],
+                                  category: snapshot.data.docs[index]
+                                      .data()['category'],
+                                  deveImg: snapshot.data.docs[index]
+                                      .data()['developerImg'],
+                                  deveName: snapshot.data.docs[index]
+                                      .data()['developerName'],
+                                  price:
+                                      snapshot.data.docs[index].data()['price'],
+                                  title:
+                                      snapshot.data.docs[index].data()['title'],
+                                  date: formatTimestamp(
+                                      snapshot.data.docs[index].data()['date']),
+                                  desc:
+                                      snapshot.data.docs[index].data()['desc'],
+                                  dislike: snapshot.data.docs[index]
+                                      .data()['dislikes']
+                                      .toString(),
+                                  like: snapshot.data.docs[index]
+                                      .data()['likes']
+                                      .toString(),
+                                  listOfImages: snapshot.data.docs[index]
+                                      .data()['listOfImages'],
+                                  toolused: snapshot.data.docs[index]
+                                      .data()['toolUsed'],
+                                )
+                              : SizedBox()
+                          : snapshot.data.docs[index]
+                                      .data()['title']
+                                      .toString()
+                                      .contains(searchingContoller.text) ||
                                   snapshot.data.docs[index]
-                                      .data()['category'] ||
-                              Home.category == "All"
-                          ? projectCard(
-                              userId:
-                                  snapshot.data.docs[index].data()['userID'],
-                              img: snapshot.data.docs[index].data()['mainImg'],
-                              category:
-                                  snapshot.data.docs[index].data()['category'],
-                              deveImg: snapshot.data.docs[index]
-                                  .data()['developerImg'],
-                              deveName: snapshot.data.docs[index]
-                                  .data()['developerName'],
-                              price: snapshot.data.docs[index].data()['price'],
-                              title: snapshot.data.docs[index].data()['title'],
-                              date: formatTimestamp(
-                                  snapshot.data.docs[index].data()['date']),
-                              desc: snapshot.data.docs[index].data()['desc'],
-                              dislike: snapshot.data.docs[index]
-                                  .data()['dislikes']
-                                  .toString(),
-                              like: snapshot.data.docs[index]
-                                  .data()['likes']
-                                  .toString(),
-                              listOfImages: snapshot.data.docs[index]
-                                  .data()['listOfImages'],
-                              toolused:
-                                  snapshot.data.docs[index].data()['toolUsed'],
-                            )
-                          : SizedBox();
+                                      .data()['desc']
+                                      .toString()
+                                      .contains(searchingContoller.text) ||
+                                  snapshot.data.docs[index]
+                                      .data()['category']
+                                      .toString()
+                                      .contains(searchingContoller.text)
+                              ? projectCard(
+                                  userId: snapshot.data.docs[index]
+                                      .data()['userID'],
+                                  img: snapshot.data.docs[index]
+                                      .data()['mainImg'],
+                                  category: snapshot.data.docs[index]
+                                      .data()['category'],
+                                  deveImg: snapshot.data.docs[index]
+                                      .data()['developerImg'],
+                                  deveName: snapshot.data.docs[index]
+                                      .data()['developerName'],
+                                  price:
+                                      snapshot.data.docs[index].data()['price'],
+                                  title:
+                                      snapshot.data.docs[index].data()['title'],
+                                  date: formatTimestamp(
+                                      snapshot.data.docs[index].data()['date']),
+                                  desc:
+                                      snapshot.data.docs[index].data()['desc'],
+                                  dislike: snapshot.data.docs[index]
+                                      .data()['dislikes']
+                                      .toString(),
+                                  like: snapshot.data.docs[index]
+                                      .data()['likes']
+                                      .toString(),
+                                  listOfImages: snapshot.data.docs[index]
+                                      .data()['listOfImages'],
+                                  toolused: snapshot.data.docs[index]
+                                      .data()['toolUsed'],
+                                )
+                              : SizedBox();
                     },
                     itemCount: snapshot.data.docs.length,
                   ),
