@@ -645,12 +645,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.white,
           title: InkWell(
-              onTap: () {
-                print(widget.clientID);
-              },
-              child: Text(widget.userName)),
+            onTap: () {
+              print(widget.clientID);
+            },
+            child: Text(
+              widget.userName,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
           actions: [
             isEnd && FirebaseAuth.instance.currentUser.uid == widget.clientID
                 ? IconButton(

@@ -46,8 +46,13 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wallet'),
-        centerTitle: true,
+        title: Text(
+          'Wallet',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        // centerTitle: true,
       ),
       body: SafeArea(
         child: ListView(
@@ -68,7 +73,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w400,
-                              color: Colors.black54),
+                              color: Colors.black),
                         ),
                   SizedBox(height: 12),
                   Row(

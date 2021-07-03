@@ -142,12 +142,6 @@ class _HomeState extends State<Home> {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-<<<<<<< HEAD
-              stream: FirebaseFirestore.instance
-                  .collection("AllProjects")
-                  .orderBy("likes", descending: true)
-                  .snapshots(),
-=======
               stream: isRecommended
                   ? FirebaseFirestore.instance
                       .collection("AllProjects")
@@ -157,7 +151,6 @@ class _HomeState extends State<Home> {
                       .collection("AllProjects")
                       .orderBy("likes", descending: true)
                       .snapshots(),
->>>>>>> bassem
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {

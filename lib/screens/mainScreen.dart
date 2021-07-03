@@ -36,10 +36,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Stack(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Stack(
           children: [
             Container(
               decoration: BoxDecoration(
@@ -206,61 +206,61 @@ class _MainScreenState extends State<MainScreen> {
             // )
           ],
         ),
-        bottomNavigationBar: BottomNavyBar(
-          selectedIndex: currentIndex,
-          showElevation: true,
-          onItemSelected: (index) {
-            setState(() => currentIndex = index);
-            _pageController.jumpToPage(index);
-          },
-          items: <BottomNavyBarItem>[
+      ),
+      bottomNavigationBar: BottomNavyBar(
+        selectedIndex: currentIndex,
+        showElevation: true,
+        onItemSelected: (index) {
+          setState(() => currentIndex = index);
+          _pageController.jumpToPage(index);
+        },
+        items: <BottomNavyBarItem>[
+          BottomNavyBarItem(
+              title: Text(
+                'Home',
+                style: TextStyle(fontSize: 14),
+              ),
+              icon: Icon(Icons.home),
+              inactiveColor: Theme.of(context).accentColor,
+              activeColor: Theme.of(context).primaryColor),
+          BottomNavyBarItem(
+              title: Text(
+                'Inbox',
+                style: TextStyle(fontSize: 14),
+              ),
+              icon: Icon(Icons.message),
+              inactiveColor: Theme.of(context).accentColor,
+              activeColor: Theme.of(context).primaryColor),
+          if (!MainScreen.isCustomer)
             BottomNavyBarItem(
                 title: Text(
-                  'Home',
-                  style: TextStyle(fontSize: 14),
-                ),
-                icon: Icon(Icons.home),
-                inactiveColor: Theme.of(context).accentColor,
-                activeColor: Theme.of(context).primaryColor),
-            BottomNavyBarItem(
-                title: Text(
-                  'Inbox',
-                  style: TextStyle(fontSize: 14),
-                ),
-                icon: Icon(Icons.message),
-                inactiveColor: Theme.of(context).accentColor,
-                activeColor: Theme.of(context).primaryColor),
-            if (!MainScreen.isCustomer)
-              BottomNavyBarItem(
-                  title: Text(
-                    'Add project',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  icon: Icon(
-                    Icons.add,
-                  ),
-                  inactiveColor: Theme.of(context).accentColor,
-                  activeColor: Theme.of(context).primaryColor),
-            BottomNavyBarItem(
-                title: Text(
-                  'Status',
+                  'Add project',
                   style: TextStyle(fontSize: 14),
                 ),
                 icon: Icon(
-                  Icons.alarm,
+                  Icons.add,
                 ),
                 inactiveColor: Theme.of(context).accentColor,
                 activeColor: Theme.of(context).primaryColor),
-            BottomNavyBarItem(
-                title: Text(
-                  'Profile',
-                  style: TextStyle(fontSize: 14),
-                ),
-                icon: Icon(Icons.person),
-                inactiveColor: Theme.of(context).accentColor,
-                activeColor: Theme.of(context).primaryColor),
-          ],
-        ),
+          BottomNavyBarItem(
+              title: Text(
+                'Status',
+                style: TextStyle(fontSize: 14),
+              ),
+              icon: Icon(
+                Icons.alarm,
+              ),
+              inactiveColor: Theme.of(context).accentColor,
+              activeColor: Theme.of(context).primaryColor),
+          BottomNavyBarItem(
+              title: Text(
+                'Profile',
+                style: TextStyle(fontSize: 14),
+              ),
+              icon: Icon(Icons.person),
+              inactiveColor: Theme.of(context).accentColor,
+              activeColor: Theme.of(context).primaryColor),
+        ],
       ),
     );
   }

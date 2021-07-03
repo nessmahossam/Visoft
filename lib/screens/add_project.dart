@@ -145,10 +145,6 @@ class _AddProjectState extends State<AddProject> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Project'),
-        centerTitle: true,
-      ),
       body: SafeArea(
         child: Form(
           key: globalKey,
@@ -309,7 +305,7 @@ class _AddProjectState extends State<AddProject> {
                                 // itemHeight: 60,
                                 iconSize: 20,
                                 hint: Text(
-                                  "Ckhoose Category",
+                                  "Choose Category",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -539,8 +535,7 @@ class _AddProjectState extends State<AddProject> {
                         "listOfImages": _ssImguploadedFileURL,
                         "date": Timestamp.now(),
                         "developerImg": developerImg,
-                        "developerName":
-                            FirebaseAuth.instance.currentUser.displayName,
+                        "developerName": currentUser.data()['Name'],
                         "likes": likes,
                         "dislikes": dislikes,
                       }).then((value) async {

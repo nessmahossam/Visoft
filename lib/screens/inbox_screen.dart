@@ -169,72 +169,63 @@ class _InboxScreenState extends State<InboxScreen> {
                   //child: Icon(Icons.logout)),
             )*/
           ],*/
-          //centerTitle: true,
+        //centerTitle: true,
         //),
-        body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                   SizedBox(
-                        height: size.height * 0.01,
+        body: SafeArea(
+      child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(children: [
+                  isSearching
+                      ? GestureDetector(
+                          onTap: () {
+                            isSearching = false;
+                            searchController.text = "";
+                            setState(() {});
+                            print("back btn ");
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 12),
+                            child: Icon(Icons.arrow_back),
+                          ),
+                        )
+                      : Container(),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Color(0xff2f9f9f),
+                            width: 1,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              iconSize: 33,
-                              color: Theme.of(context).primaryColor,
-                              onPressed:() =>Navigator.of(context).pop()),
-                    ),
-                  Row(children: [
-                    isSearching
-                        ? GestureDetector(
+                      child: Row(children: [
+                        Expanded(
+                            child: TextField(
+                                controller: searchController,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Search with username "))),
+                        GestureDetector(
                             onTap: () {
-                              isSearching = false;
-                              searchController.text = "";
-                              setState(() {});
-                              print("back btn ");
+                              if (searchController.text != "") {
+                                print(myName);
+                                print("search btn ");
+                                onSearchBtnClick();
+                              }
                             },
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 12),
-                              child: Icon(Icons.arrow_back),
-                            ),
-                          )
-                        : Container(),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 16),
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Color(0xff2f9f9f),
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(children: [
-                          Expanded(
-                              child: TextField(
-                                  controller: searchController,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Search with username "))),
-                          GestureDetector(
-                              onTap: () {
-                                if (searchController.text != "") {
-                                  print(myName);
-                                  print("search btn ");
-                                  onSearchBtnClick();
-                                }
-                              },
-                              child: Icon(Icons.search))
-                        ]),
-                      ),
-                    )
-                  ]),
-                  isSearching ? SizedBox() : chatRoomsList()
-                ])));
+                            child: Icon(Icons.search))
+                      ]),
+                    ),
+                  )
+                ]),
+                isSearching ? SizedBox() : chatRoomsList()
+              ])),
+    ));
   }
 }
 

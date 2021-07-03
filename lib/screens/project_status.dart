@@ -240,11 +240,7 @@ class _ProjectStatusState extends State<ProjectStatus> {
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          // backgroundColor: Theme.of(context).backgroundColor,
-          // toolbarHeight: 70,
-          //
-          title: Text('Project Status'),
-          centerTitle: true,
+          toolbarHeight: 56,
           bottom: TabBar(
             tabs: [
               Tab(
@@ -256,8 +252,10 @@ class _ProjectStatusState extends State<ProjectStatus> {
             ],
           ),
         ),
-        body: TabBarView(
-          children: lists,
+        body: SafeArea(
+          child: TabBarView(
+            children: lists,
+          ),
         ),
       ),
     );

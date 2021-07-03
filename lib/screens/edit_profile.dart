@@ -12,6 +12,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/screens/profile_screen.dart';
 import 'package:viisoft/screens/register_screen.dart';
+import 'package:viisoft/widgets/my_button.dart';
 import 'package:viisoft/widgets/my_text_field.dart';
 import 'package:path/path.dart' as Path;
 
@@ -86,40 +87,25 @@ class _EditProfileState extends State<EditProfile> {
       appBar: AppBar(
         title: Text(
           "Edit Profile",
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         // centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              onPressed: () {
-                print(_uploadedFileURL);
-                FirebaseFirestore.instance
-                    .collection("Users")
-                    .doc(FirebaseAuth.instance.currentUser.uid)
-                    .update({
-                  'userImg': _uploadedFileURL,
-                  'Name': _nameController.text,
-                  'Mail': _emailController.text,
-                  'Phone': _phoneNumController.text,
-                }).then((value) {
-                  print("ok done");
-                  Navigator.pop(context);
-                });
-                FirebaseFirestore.instance
-                    .collection("Users")
-                    .doc(FirebaseAuth.instance.currentUser.uid)
-                    .update({
-                  'assetImage': false,
-                });
-              },
-              child: Text(
-                'Update',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: TextButton(
+        //       onPressed: () {
+
+        //       },
+        //       child: Text(
+        //         'Update',
+        //         style: TextStyle(color: Theme.of(context).primaryColor),
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       body: SafeArea(
         child: Form(
@@ -274,131 +260,35 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 12.0,
                 ),
+                MyButton(
+                  title: "Update",
+                  onPress: () {
+                    print(_uploadedFileURL);
+                    FirebaseFirestore.instance
+                        .collection("Users")
+                        .doc(FirebaseAuth.instance.currentUser.uid)
+                        .update({
+                      'userImg': _uploadedFileURL,
+                      'Name': _nameController.text,
+                      'Mail': _emailController.text,
+                      'Phone': _phoneNumController.text,
+                    }).then((value) {
+                      print("ok done");
+                      Navigator.pop(context);
+                    });
+                    FirebaseFirestore.instance
+                        .collection("Users")
+                        .doc(FirebaseAuth.instance.currentUser.uid)
+                        .update({
+                      'assetImage': false,
+                    });
+                  },
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class ProfileImgAndRating2 extends StatelessWidget {
-  const ProfileImgAndRating2({
-    Key key,
-    @required this.height,
-  }) : super(key: key);
-
-  final double height;
-  static String assetImg = 'assets/images/profile.png';
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(),
-      height: height * 0.43,
-      child: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("Users")
-              .doc(currentUser.id)
-              .snapshots(),
-          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text('Something went wrong');
-            }
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            }
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                double innerHeight = constraints.maxHeight;
-                double innerWidth = constraints.maxWidth;
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        height: innerHeight * 0.72,
-                        width: innerWidth,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              offset: Offset.infinite,
-                              blurRadius: 0.0,
-                              color: Colors.grey,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 80,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                currentUser.data()['Name'],
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontFamily: 'Nunito',
-                                  fontSize: 26,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            RatingBar.readOnly(
-                                filledColor: Colors.yellow,
-                                size: 30,
-                                initialRating: 5,
-                                filledIcon: Icons.star,
-                                emptyIcon: Icons.star)
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: Container(
-                          child: Image.asset(
-                            currentUser.data()['userImg'],
-                            width: innerWidth * 0.45,
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 110,
-                      right: 105,
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          onPressed: () {
-                            // Navigator.pushNamed(context, EditProfile.namedRoute);
-                          },
-                          icon: Icon(Icons.add_a_photo),
-                          color: Theme.of(context).primaryColor,
-                          iconSize: 30,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            );
-          }),
     );
   }
 }

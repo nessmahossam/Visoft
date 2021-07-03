@@ -17,23 +17,23 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).primaryColor,
-                Theme.of(context).primaryColorLight
-              ],
-              begin: FractionalOffset.bottomCenter,
-              end: FractionalOffset.topCenter,
+    return SafeArea(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Theme.of(context).primaryColorLight
+                ],
+                begin: FractionalOffset.bottomCenter,
+                end: FractionalOffset.topCenter,
+              ),
             ),
           ),
-        ),
-        SafeArea(
-          child: Scaffold(
+          Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -115,9 +115,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
