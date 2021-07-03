@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:viisoft/screens/project_status_details.dart';
 
 class ProjectStatus extends StatefulWidget {
@@ -35,95 +36,125 @@ class _ProjectStatusState extends State<ProjectStatus> {
           }
 
           List<QueryDocumentSnapshot> bodyData = snapshot.data.docs;
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            scrollDirection: Axis.vertical,
-            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                child: Stack(
+          return snapshot.data.docs.length == 0
+              ? Center(
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Card(
-                      elevation: 0.5,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(4.0),
-                        onTap: () {
-                          ProjectStatusDetails.docId =
-                              snapshot.data.docs[index].id;
-                          ProjectStatusDetails.collectionID = "OngoingProjects";
-                          Navigator.of(context)
-                              .pushNamed(ProjectStatusDetails.namedRoute);
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 120,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: imageRight
-                                    ? BorderRadius.only(
-                                        topRight: Radius.circular(4.0),
-                                        bottomRight: Radius.circular(4.0),
-                                      )
-                                    : BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        bottomLeft: Radius.circular(4.0),
-                                      ),
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      '${bodyData[index].data()["projImg"]}',
-                                    ),
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              width: 248.0,
-                              height: 129.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    // SizedBox(
+                    //   height: 30,
+                    // ),
+                    Icon(
+                      FontAwesomeIcons.sadTear,
+                      size: 300,
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Text(
+                      "There is No projects you bought.",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor.withOpacity(0.5),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ))
+              : ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      child: Stack(
+                        children: [
+                          Card(
+                            elevation: 0.5,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(4.0),
+                              onTap: () {
+                                ProjectStatusDetails.docId =
+                                    snapshot.data.docs[index].id;
+                                ProjectStatusDetails.collectionID =
+                                    "OngoingProjects";
+                                Navigator.of(context)
+                                    .pushNamed(ProjectStatusDetails.namedRoute);
+                              },
+                              child: Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      '${bodyData[index].data()["projName"]}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      softWrap: true,
+                                  Container(
+                                    height: 120,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: imageRight
+                                          ? BorderRadius.only(
+                                              topRight: Radius.circular(4.0),
+                                              bottomRight: Radius.circular(4.0),
+                                            )
+                                          : BorderRadius.only(
+                                              topLeft: Radius.circular(4.0),
+                                              bottomLeft: Radius.circular(4.0),
+                                            ),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            '${bodyData[index].data()["projImg"]}',
+                                          ),
+                                          fit: BoxFit.cover),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      'Developer Name: ${bodyData[index].data()["devName"]}',
-                                      style: TextStyle(
-                                          fontSize: 12.0, color: Colors.black),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      '${bodyData[index].data()["desc"]}',
-                                      style: TextStyle(
-                                          fontSize: 12.0, color: Colors.black),
+                                  Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    width: 248.0,
+                                    height: 129.0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            '${bodyData[index].data()["projName"]}',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            'Developer Name: ${bodyData[index].data()["devName"]}',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            '${bodyData[index].data()["desc"]}',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+                    );
+                  },
+                );
         },
       ),
       StreamBuilder<QuerySnapshot>(
@@ -142,95 +173,125 @@ class _ProjectStatusState extends State<ProjectStatus> {
           }
 
           List<QueryDocumentSnapshot> bodyData = snapshot.data.docs;
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            scrollDirection: Axis.vertical,
-            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                child: Stack(
+          return snapshot.data.docs.length == 0
+              ? Center(
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Card(
-                      elevation: 0.5,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(4.0),
-                        onTap: () {
-                          ProjectStatusDetails.docId =
-                              snapshot.data.docs[index].id;
-                          ProjectStatusDetails.collectionID = "DoneProjects";
-                          Navigator.of(context)
-                              .pushNamed(ProjectStatusDetails.namedRoute);
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 120,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: imageRight
-                                    ? BorderRadius.only(
-                                        topRight: Radius.circular(4.0),
-                                        bottomRight: Radius.circular(4.0),
-                                      )
-                                    : BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        bottomLeft: Radius.circular(4.0),
-                                      ),
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      '${bodyData[index].data()["projImg"]}',
-                                    ),
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              width: 248.0,
-                              height: 129.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    // SizedBox(
+                    //   height: 30,
+                    // ),
+                    Icon(
+                      FontAwesomeIcons.sadTear,
+                      size: 300,
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Text(
+                      "There is No projects you finished.",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor.withOpacity(0.5),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ))
+              : ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      child: Stack(
+                        children: [
+                          Card(
+                            elevation: 0.5,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(4.0),
+                              onTap: () {
+                                ProjectStatusDetails.docId =
+                                    snapshot.data.docs[index].id;
+                                ProjectStatusDetails.collectionID =
+                                    "DoneProjects";
+                                Navigator.of(context)
+                                    .pushNamed(ProjectStatusDetails.namedRoute);
+                              },
+                              child: Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      '${bodyData[index].data()["projName"]}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      softWrap: true,
+                                  Container(
+                                    height: 120,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: imageRight
+                                          ? BorderRadius.only(
+                                              topRight: Radius.circular(4.0),
+                                              bottomRight: Radius.circular(4.0),
+                                            )
+                                          : BorderRadius.only(
+                                              topLeft: Radius.circular(4.0),
+                                              bottomLeft: Radius.circular(4.0),
+                                            ),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            '${bodyData[index].data()["projImg"]}',
+                                          ),
+                                          fit: BoxFit.cover),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      'Developer Name: ${bodyData[index].data()["devName"]}',
-                                      style: TextStyle(
-                                          fontSize: 12.0, color: Colors.black),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      '${bodyData[index].data()["desc"]}',
-                                      style: TextStyle(
-                                          fontSize: 12.0, color: Colors.black),
+                                  Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    width: 248.0,
+                                    height: 129.0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            '${bodyData[index].data()["projName"]}',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            'Developer Name: ${bodyData[index].data()["devName"]}',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            '${bodyData[index].data()["desc"]}',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+                    );
+                  },
+                );
         },
       ),
     ];

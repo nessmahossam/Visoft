@@ -19,18 +19,26 @@ import 'home_screen.dart';
 class MainScreen extends StatefulWidget {
   static String namedRoute = '/mainScreen';
   static bool isCustomer = true;
+  int jumpFunction = 0;
+
+  MainScreen({Key key, this.jumpFunction}) : super(key: key);
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   double value = 0;
-  PageController _pageController = PageController();
+  PageController _pageController;
   int currentIndex = 0;
 
   @override
   void initState() {
     // TODO: implement initState
+    currentIndex = widget.jumpFunction;
+    _pageController = PageController(
+        initialPage: widget.jumpFunction == null ? 0 : widget.jumpFunction);
+    setState(() {});
+
     super.initState();
   }
 
@@ -163,10 +171,12 @@ class _MainScreenState extends State<MainScreen> {
                     resizeToAvoidBottomInset: true,
                     body: PageView(
                       controller: _pageController,
+
                       // physics: NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {
                         setState(() => currentIndex = index);
                       },
+
                       children: <Widget>[
                         Home(
                           function: () {

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:viisoft/constants.dart';
 import 'package:viisoft/models/firebase_fn.dart';
+import 'package:viisoft/screens/mainScreen.dart';
 import 'package:viisoft/screens/payment_screen.dart';
 import 'package:viisoft/screens/project_status.dart';
 import 'package:viisoft/screens/wallet_detials_screen.dart';
@@ -239,9 +240,19 @@ class _WalletScreenState extends State<WalletScreen> {
                                                         chatRoomId,
                                                         lastMessageInfoMap);
                                               });
-
-                                              Navigator.pushNamed(context,
-                                                  ProjectStatus.namedRoute);
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MainScreen(
+                                                          jumpFunction: 3,
+                                                        )),
+                                              );
+                                              // Navigator.pushNamed(context,
+                                              //     ProjectStatus.namedRoute);
                                             }),
                                         DialogButton(
                                             child:

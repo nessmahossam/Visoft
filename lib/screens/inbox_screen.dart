@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:viisoft/models/firebase_fn.dart';
 import 'package:viisoft/screens/register_screen.dart';
@@ -51,14 +52,39 @@ class _InboxScreenState extends State<InboxScreen> {
       stream: chatRoomsStream,
       builder: (context, snapshot) {
         return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
-                  return ChatRoomListTile(ds["lastMessage"], ds.id, myName,
-                      ds['clientId'], ds['devID'], ds['projName']);
-                })
+            ? snapshot.data.docs.length == 0
+                ? Center(
+                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Icon(
+                        FontAwesomeIcons.sadTear,
+                        size: 300,
+                      ),
+                      SizedBox(
+                        height: 100,
+                      ),
+                      Text(
+                        "There is No friends to chat with.",
+                        style: TextStyle(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.5),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ))
+                : ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot ds = snapshot.data.docs[index];
+                      return ChatRoomListTile(ds["lastMessage"], ds.id, myName,
+                          ds['clientId'], ds['devID'], ds['projName']);
+                    })
             : Center(child: CircularProgressIndicator());
       },
     );
@@ -171,7 +197,6 @@ class _InboxScreenState extends State<InboxScreen> {
           ],*/
         //centerTitle: true,
         //),
-<<<<<<< HEAD
         body: SafeArea(
       child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -212,27 +237,6 @@ class _InboxScreenState extends State<InboxScreen> {
                                     border: InputBorder.none,
                                     hintText: "Search with username "))),
                         GestureDetector(
-=======
-        body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        iconSize: 33,
-                        color: Theme.of(context).primaryColor,
-                        onPressed: () => Navigator.of(context).pop()),
-                  ),
-                  Row(children: [
-                    isSearching
-                        ? GestureDetector(
->>>>>>> bassem
                             onTap: () {
                               if (searchController.text != "") {
                                 print(myName);
