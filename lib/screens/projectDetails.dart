@@ -141,9 +141,9 @@ class _projectDetailsState extends State<projectDetails> {
                   slivers: [
                     SliverAppBar(
                       expandedHeight: 350,
-                      backgroundColor: Colors.grey[600],
+                      // backgroundColor: Colors.grey[600],
                       flexibleSpace: FlexibleSpaceBar(
-                        collapseMode: CollapseMode.pin,
+                        collapseMode: CollapseMode.parallax,
                         background: Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
